@@ -1,0 +1,28 @@
+{
+  "name": "@loremipsum/mocking-hans",
+  "author": "Kevin Hirczy",
+  "version": "0.1.0",
+  "description": "You don't mock the Hans, he's mocking you.",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@projekte.loremipsum.at:li/dev/mocking-hans.git"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/node": "^10.12.0",
+    "chalk": "^2.4.1",
+    "express": "^4.16.4",
+    "faker": "^4.1.0",
+    "jsontoxml": "^1.0.1",
+    "morgan": "^1.9.1",
+    "reflect-metadata": "^0.1.12",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.3"
+  }
+}
