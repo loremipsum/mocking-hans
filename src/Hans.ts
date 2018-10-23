@@ -46,8 +46,8 @@ export class Hans {
         RouteRegistry
             .getRoutes()
             .filter(r => r.target.constructor.name === app.name).forEach((route) => {
-            expressApp[route.httpMethod](route.path, (req, res) => {
-                const cb = route.target[route.property](req, res, io);
+            expressApp[route.httpMethod](route.path, (req, res, next) => {
+                const cb = route.target[route.property](req, res, next, io);
 
                 if (!(cb instanceof Response)) {
                     return cb;

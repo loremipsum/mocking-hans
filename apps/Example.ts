@@ -12,11 +12,17 @@ import {Socket} from "../src/Decorator/Socket";
     port: 4999
 })
 export class Example {
+    /**
+     * A simple text response
+     */
     @Route("/", HttpMethod.GET)
     index() {
         return new Response('Hello there!');
     }
 
+    /**
+     * A JSON response
+     */
     @Route("/json", HttpMethod.GET)
     json() {
         return new JsonResponse({
@@ -24,11 +30,9 @@ export class Example {
         }, 400);
     }
 
-    @Route("/simple", HttpMethod.GET)
-    simple() {
-        return new Response('Hello dude');
-    }
-
+    /**
+     * A XML from JSON response
+     */
     @Route("/xml", HttpMethod.GET)
     xml() {
         return new XmlFromJsonResponse({
@@ -56,22 +60,44 @@ export class Example {
         });
     }
 
+    /**
+     * Serving files via the `res` object is also possible.
+     *
+     * @param req
+     * @param res
+     */
     @Route("/file", HttpMethod.GET)
     file(req, res) {
         return res.sendFile(path.resolve('client.html'));
     }
 
+    /**
+     * Broadcasts a message coming from the query string (/broadcast?message=...) to every connected socket.
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @param io
+     */
     @Route("/broadcast", HttpMethod.GET)
-    broadcast(req, res, io) {
+    broadcast(req, res, next, io) {
         io.emit('news', {message: req.query.message, time: +(new Date())});
         return new JsonResponse({success: 1});
     }
 
+    /**
+     * On connection to the global room.
+     */
     @Socket('connection')
     onConnect() {
         console.log(`Someone connected to Example.`);
     }
 
+    /**
+     * On connection to a certain room.
+     *
+     * @param socket
+     */
     @Socket('connection', '/topic')
     onTopic(socket) {
         console.log('Someone subscribed to /topic');

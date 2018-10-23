@@ -1,13 +1,13 @@
 import "reflect-metadata";
-import {Example} from "./Apps/Example";
-import {Foobar} from "./Apps/Foobar";
+import {Example} from "./apps/Example";
+import {Twitter} from "./apps/Twitter";
 import {Hans} from "./src/Hans";
 
 const chalk = require('chalk');
 
 const apps = [
     Example,
-    Foobar
+    Twitter
 ];
 
 (new Hans(apps)).bootstrap().then(() => {
