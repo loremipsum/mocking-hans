@@ -9,18 +9,12 @@ import {Socket} from "../src/Decorator/Socket";
 
 @App({
     name: 'example',
-    port: 4999,
-    sockets: {
-        enabled: true,
-        callback: () => console.log('Welcome dude')
-    }
+    port: 4999
 })
 export class Example {
     @Route("/", HttpMethod.GET)
     index() {
-        return {
-            foo: 'bar'
-        };
+        return new Response('Hello there!');
     }
 
     @Route("/json", HttpMethod.GET)
@@ -67,8 +61,20 @@ export class Example {
         return res.sendFile(path.resolve('client.html'));
     }
 
-    @Socket("/socket")
-    socket(socket) {
-        socket.emit('foo', { foo: 'bar' });
+    @Route("/broadcast", HttpMethod.GET)
+    broadcast(req, res, io) {
+        io.emit('news', {message: req.query.message, time: +(new Date())});
+        return new JsonResponse({success: 1});
+    }
+
+    @Socket('connection')
+    onConnect() {
+        console.log(`Someone connected to Example.`);
+    }
+
+    @Socket('connection', '/topic')
+    onTopic(socket) {
+        console.log('Someone subscribed to /topic');
+        socket.emit('news', {time: +(new Date())});
     }
 }

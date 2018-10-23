@@ -1,9 +1,8 @@
 import "reflect-metadata";
-import {HttpMethod} from "../Enum/HttpMethod";
-import {RouteRegistry} from "../Registry/RouteRegistry";
+import {SocketRegistry} from "../Registry/SocketRegistry";
 
-export const Socket = (path: string): MethodDecorator => {
+export const Socket = (event: string, namespace: string = '/'): MethodDecorator => {
     return (target: any, propertyKey: string): void => {
-
+        SocketRegistry.add(target, propertyKey, event, namespace);
     };
 };

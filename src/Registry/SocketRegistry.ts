@@ -1,24 +1,23 @@
 import "reflect-metadata";
-import {HttpMethod} from "../Enum/HttpMethod";
 
 export const SocketRegistry = (new class {
-    protected routes: {
+    protected sockets: {
         target: object,
         property: string,
-        path: string,
-        httpMethod: HttpMethod
+        event: string,
+        namespace: string
     }[] = [];
 
-    public add(target: object, property: string, path: string, httpMethod: HttpMethod) {
-        this.routes.push({
+    public add(target: object, property: string, event: string, namespace: string = '/') {
+        this.sockets.push({
             target,
             property,
-            path,
-            httpMethod
+            event,
+            namespace
         });
     }
 
-    public getRoutes() {
-        return this.routes;
+    public getSockets() {
+        return this.sockets;
     }
 });

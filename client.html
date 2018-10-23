@@ -5,11 +5,35 @@
     <title>Mocking Hans</title>
 </head>
 <body>
-    Hans.
+    <h1>Hans.</h1>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <button id="subscribe">Mock the Hans.</button>
+    <ul id="messages"></ul>
+
+    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
     <script>
         let socket = io.connect('http://localhost:4999');
+
+        socket.on('connection', () => console.log('Connected to socket server.'));
+
+        socket.on('news', data => {
+            console.log(data);
+            const node = document.createElement('li');
+            const text = document.createTextNode(data.message);
+            node.appendChild(text);
+            document.getElementById('messages').appendChild(node);
+        });
+
+        document.getElementById('subscribe').addEventListener('click', () => {
+            const topic = io('http://localhost:4999/topic');
+            topic.on('news', data => {
+                console.log(data);
+            });
+        });
+
+        socket.on('disconnect', () => console.log('You have been disconnected.'));
+
+        socket.on('error', err => console.error(err));
     </script>
 </body>
 </html>
