@@ -10,7 +10,7 @@ const path = require('path');
     port: 63000
 })
 export class Grafana {
-    @Route("/grafana/kpi1", HttpMethod.GET)
+    @Route("/grafana", HttpMethod.GET)
     getKPI(req, res) {
         return new JsonResponse({
             'img': req.protocol + '://' + req.get('host') + '/images/chart1.png'
