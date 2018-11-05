@@ -13,13 +13,13 @@ export class TollSystemData {
         return new JsonResponse({
             "ts-1": {
                 "name": "Toll System 1",
-                "status": "ok",
+                "status": "warning",
                 "lastStateChange": '12:34:56'
             }
             ,
             "ts-2": {
                 "name": "Toll System 2",
-                "status": "warning",
+                "status": "ok",
                 "lastStateChange": '12:34:56'
             }
 

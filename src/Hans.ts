@@ -16,6 +16,7 @@ export class Hans {
     public async bootstrap() {
         this.apps.forEach(app => {
             const expressApp = express();
+            expressApp.use(express.static('public'));
 
             const port = Reflect.getMetadata('port', app);
             const name = Reflect.getMetadata('name', app);
