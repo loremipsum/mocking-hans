@@ -10,19 +10,27 @@ import {JsonResponse} from "../src/Response/JsonResponse";
 export class TollSystemData {
     @Route("/tollsystem/list", HttpMethod.GET)
     getTollSystems() {
-        return new JsonResponse({
-            "ts-1": {
+        let status = [
+            'ok',
+            'warning',
+            'critical',
+            'undefined'
+        ];
+
+        return new JsonResponse([
+            {
+                "id": "ts-1",
                 "name": "Toll System 1",
-                "status": "warning",
+                "status": status[Math.floor(Math.random()*status.length)],
                 "lastStateChange": '12:34:56'
             }
             ,
-            "ts-2": {
+            {
+                "id": "ts-2",
                 "name": "Toll System 2",
-                "status": "ok",
+                "status": status[Math.floor(Math.random()*status.length)],
                 "lastStateChange": '12:34:56'
             }
-
-        })
+        ])
     }
 }
