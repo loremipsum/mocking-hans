@@ -33,4 +33,20 @@ export class TollSystemData {
             }
         ])
     }
+
+    @Route("/tollsystem/name", HttpMethod.GET)
+    getTollSystemName() {
+        return new JsonResponse('TollSystem A')
+    }
+
+    @Route("/tollsystem/status", HttpMethod.GET)
+    getTollSystemStatus() {
+        let status = [
+            'ok',
+            'warning',
+            'critical',
+            'undefined'
+        ];
+        return new JsonResponse(status[Math.floor(Math.random()*status.length)])
+    }
 }

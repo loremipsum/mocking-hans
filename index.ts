@@ -4,7 +4,7 @@ import {Twitter} from "./apps/Twitter";
 import {Hans} from "./src/Hans";
 import {TollSystemData} from "./apps/TollSystemData";
 import {Grafana} from "./apps/Grafana";
-import {Incigna} from "./apps/Incigna";
+import {Icigna} from "./apps/Icigna";
 
 const chalk = require('chalk');
 
@@ -13,7 +13,7 @@ const apps = [
     Twitter,
     TollSystemData,
     Grafana,
-    Incigna
+    Icigna
 ];
 
 (new Hans(apps)).bootstrap().then(() => {
