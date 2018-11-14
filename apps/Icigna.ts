@@ -7,11 +7,11 @@ const path = require('path');
 let counter = 0;
 
 @App({
-    name: 'Incigna',
+    name: 'Icigna',
     port: 64000
 })
 export class Icigna {
-    @Route("/incigna/chargingPointStatus/", HttpMethod.GET)
+    @Route("/icigna/chargingPointStatus/", HttpMethod.GET)
     getChargingPointStatus(req, res) {
         let status = [
             'ok',
@@ -70,11 +70,11 @@ export class Icigna {
                     "type":"Service"
                 }
             ]
-        }
+        };
         return new JsonResponse(response);
     }
 
-    @Route("/incigna/chargingPointPosition/", HttpMethod.GET)
+    @Route("/icigna/chargingPointPosition/", HttpMethod.GET)
     getChargingPointPosition(req, res) {
         const position = [
             {
@@ -100,6 +100,21 @@ export class Icigna {
         return new JsonResponse(cp);
     }
 
+    @Route("/icigna/chargingPointTransactions/", HttpMethod.GET)
+    getChargingPointTransactions(req, res) {
+        const transactions = [
+            {
+                uuid: '123e4567-e89b-12d3-a456-426655440000',
+                begin: '1994-11-05T13:15:30.567Z',
+                end: '1994-11-05T13:15:30.567Z'
+            },
+            {
+                uuid: '123e4567-e89b-12d3-a456-426655440000',
+                begin: '1994-11-05T13:15:30.567Z',
+                end: '1994-11-05T13:15:30.567Z'
+            },
+        ];
 
-
+        return new JsonResponse(transactions);
+    }
 }
