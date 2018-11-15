@@ -29,7 +29,7 @@ export class DC {
     @Route("/dc/transaction/", HttpMethod.GET)
     getTransaction(req, res) {
         res.set('Content-Type', 'text/xml');
-        const transaction =
+        const transaction = '<?xml version="1.0" encoding="UTF-8"?>\n' +
             '<cp:trafficepoch xmlns:cp="http://www.efkon.com/xml/norcp/v01" xmlns:ec="http://www.efkon.com/xml/common/v01" xmlns:el="http://www.efkon.com/xml/elite/v08" xmlns:tr="http://www.efkon.com/xml/transit_event/v01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" begin="2001-12-17T09:30:47Z" end="2001-12-17T09:30:47Z" xsi:schemaLocation="http://www.efkon.com/xml/norcp/v01 norcp.xsd">\n' +
             '   <cp:trafficevent uuid="00000000-0000-0000-0000-000000000000" time="2001-12-17T09:30:47Z">\n' +
             '      <System chargingpoint="0" direction="0" lane="0" spottest="true">\n' +
