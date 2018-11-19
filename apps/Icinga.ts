@@ -11,7 +11,23 @@ let counter = 0;
     port: 64000
 })
 export class Icinga {
-    @Route("/icinga/chargingPointStatus/", HttpMethod.GET)
+    @Route("/tollsystem/name/:tollSystemId", HttpMethod.GET)
+    getTollSystemName(req,res) {
+        return new JsonResponse('Toll System ' + req.params.tollSystemId.charAt(0).toUpperCase() + req.params.tollSystemId.slice(1));
+    }
+
+    @Route("/tollsystem/status", HttpMethod.GET)
+    getTollSystemStatus() {
+        let status = [
+            'ok',
+            'warning',
+            'critical',
+            'undefined'
+        ];
+        return new JsonResponse(status[Math.floor(Math.random()*status.length)])
+    }
+
+    @Route("/chargingPointStatus/", HttpMethod.GET)
     getChargingPointStatus(req, res) {
         let status = [
             '0',
@@ -68,7 +84,7 @@ export class Icinga {
         return new JsonResponse(response);
     }
 
-    @Route("/icinga/chargingPointPosition/", HttpMethod.GET)
+    @Route("/chargingPointPosition/", HttpMethod.GET)
     getChargingPointPosition(req, res) {
         const position = [
             {
@@ -94,7 +110,7 @@ export class Icinga {
         return new JsonResponse(cp);
     }
 
-    @Route("/icinga/chargingPointTransactions/", HttpMethod.GET)
+    @Route("/chargingPointTransactions/", HttpMethod.GET)
     getChargingPointTransactions(req, res) {
         const transactions = [
             {
