@@ -13,10 +13,10 @@
     <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
     <script>
         // Connect to our socket on port 4999
-        let socket = io.connect('http://localhost:4999');
+        let socket = io.connect('http://localhost:65000');
 
         // Whenever "news" is published from the socket append the message to our messages list
-        socket.on('news', data => {
+        socket.on('transaction', data => {
             console.log(data);
             const node = document.createElement('li');
             const text = document.createTextNode(data.message);
@@ -26,8 +26,8 @@
 
         // In case of clicking on the subscribe button we're going to connect to a different namespace
         document.getElementById('subscribe').addEventListener('click', () => {
-            const topic = io('http://localhost:4999/topic');
-            topic.on('news', data => {
+            const topic = io('http://localhost:65000/transactions');
+            topic.on('transaction', data => {
                 console.log(data);
             });
         });

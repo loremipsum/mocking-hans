@@ -3,7 +3,7 @@ import {Route} from "../src/Decorator/Route";
 import {HttpMethod} from "../src/Enum/HttpMethod";
 import {JsonResponse} from "../src/Response/JsonResponse";
 
-const path = require('path');
+const path  = require('path');
 let counter = 0;
 
 @App({
@@ -11,24 +11,29 @@ let counter = 0;
     port: 64000
 })
 export class Icinga {
-    @Route("/tollsystem/name/:tollSystemId", HttpMethod.GET)
-    getTollSystemName(req,res) {
-        return new JsonResponse('Toll System ' + req.params.tollSystemId.charAt(0).toUpperCase() + req.params.tollSystemId.slice(1));
+    @Route("/v1/objects/hostgroups", HttpMethod.GET)
+    getTollSystemName(req, res) {
+        let name = req.query.filter.replace('match("', '').replace('*",hostgroup.name)', '');
+        return new JsonResponse(
+            {
+                "results": [
+                    {
+                        "attrs": {
+                            "display_name": name
+                        },
+                        "joins": {},
+                        "meta": {},
+                        "name": "tollsystem-fake",
+                        "type": "HostGroup"
+                    }
+                ]
+            }
+        );
+
     }
 
-    @Route("/tollsystem/status", HttpMethod.GET)
-    getTollSystemStatus() {
-        let status = [
-            'ok',
-            'warning',
-            'critical',
-            'undefined'
-        ];
-        return new JsonResponse(status[Math.floor(Math.random()*status.length)])
-    }
-
-    @Route("/chargingPointStatus/", HttpMethod.GET)
-    getChargingPointStatus(req, res) {
+    @Route("/v1/objects/services/:host", HttpMethod.GET)
+    getTollSystemStatus(req, res) {
         let status = [
             '0',
             '1',
@@ -38,50 +43,70 @@ export class Icinga {
 
         let state = status[Math.floor(Math.random() * status.length)];
 
-        let response = {
-            "results": [{
-                "attrs": {
-                    "last_hard_state": state,
-                    "next_check": 1542212611.7149841785,
-                    "last_check_result": {
-                        "active": true,
-                        "check_source": "cp1-0-p-controller.oslo.efkon.no",
-                        "command": [
-                            "/usr/lib/nagios/plugins/check_dummy",
-                            "0",
-                            "Check was successful."
-                        ],
-                        "execution_end": 1542100026.3360800743,
-                        "execution_start": 1542100026.3360800743,
-                        "exit_status": 0.0,
-                        "output": "OK: Check was successful.",
-                        "performance_data": [],
-                        "schedule_end": 1542100026.3396730423,
-                        "schedule_start": 1542100026.3357160091,
-                        "state": state,
-                        "ttl": 0.0,
-                        "type": "CheckResult",
-                        "vars_after": {
-                            "attempt": 1.0,
-                            "reachable": true,
-                            "state": state,
-                            "state_type": 1.0
-                        },
-                        "vars_before": {
-                            "attempt": 1.0,
-                            "reachable": true,
-                            "state": status[Math.floor(Math.random() * status.length)],
-                            "state_type": 1.0
+        if (req.params.host.includes('zone')) {
+            return new JsonResponse(
+                {
+                    "results": [
+                        {
+                            "attrs": {
+                                "last_check_result": {
+                                    "active": true,
+                                    "check_source": "norway-monitoring-1.efkon.com",
+                                    "command": null,
+                                    "execution_end": 1542794612.030436039,
+                                    "execution_start": 1542794612.030436039,
+                                    "exit_status": 0.0,
+                                    "output": "Check was successful.",
+                                    "performance_data": [],
+                                    "schedule_end": 1542794612.0304439068,
+                                    "schedule_start": 1542794612.0299999714,
+                                    "state": 0.0,
+                                    "ttl": 0.0,
+                                    "type": "CheckResult",
+                                    "vars_after": {
+                                        "attempt": 1.0,
+                                        "reachable": true,
+                                        "state": state,
+                                        "state_type": 1.0
+                                    },
+                                    "vars_before": {
+                                        "attempt": 1.0,
+                                        "reachable": true,
+                                        "state": status[Math.floor(Math.random() * status.length)],
+                                        "state_type": 1.0
+                                    }
+                                },
+                                "last_hard_state": state,
+                                "next_check": 1542794672.0299999714
+                            },
+                            "joins": {},
+                            "meta": {},
+                            "name": "ncp20-zone.cp.fake.efkon.no!overall_system_health",
+                            "type": "Service"
                         }
+                    ]
+                }
+            )
+        }
+
+        return new JsonResponse(
+            {
+                "results": [
+                    {
+                        "attrs": {
+                            "host_name": "fake.efkon.no",
+                            "last_hard_state": state,
+                            "next_check": 1542792309.9918391705
+                        },
+                        "joins": {},
+                        "meta": {},
+                        "name": "fake.efkon.no!overall_system_health",
+                        "type": "Service"
                     }
-                },
-                "joins": {},
-                "meta": {},
-                "name": "cp1-0.oslo.efkon.no-system_monitoring!overall_system_health",
-                "type": "Service"
-            }]
-        };
-        return new JsonResponse(response);
+                ]
+            }
+        )
+
     }
 
     @Route("/chargingPointPosition/", HttpMethod.GET)
