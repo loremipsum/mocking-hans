@@ -72,7 +72,7 @@ export class Twitter {
 Going to `http://localhost:61000/1.1/search/tweets.json` will now return valid JSON containing
 the given tweet.
 
-#### Sockets
+#### Sockets with socket.io
 
 Every app is started alongside a socket server. Socket interfaces are implemented the same way 
 as HTTP routes, but with the `@Socket` decorator:
@@ -102,7 +102,25 @@ Using sockets on your client requires the `socket.io-client` library to be insta
 </script>
 ```
 
-See `client.html` for a more detailed example.
+See `client-socketio.html` for a more detailed example.
+
+#### WebSockets
+
+WebSocket interfaces are implemented much like Sockets, but with the `@Websocket` decorator:
+
+```typescript
+@Websocket('connection')
+onConnect() {
+    console.log(`Someone connected to / via Websocket.`);
+}
+```
+
+The `@Websocket` decorator accepts two parameters:
+
+1. The event (in this case `connection`)
+2. The topic or path (by default `/`)
+
+See `client-websocket.html` for an example of a client using the WebSocket API.
 
 ### API
 
