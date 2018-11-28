@@ -33,7 +33,7 @@ export class Icinga {
     }
 
     @Route("/v1/objects/services/:host", HttpMethod.GET)
-    getTollSystemStatus(req, res) {
+    getServices(req, res) {
         let status = [
             '0',
             '1',
@@ -89,6 +89,45 @@ export class Icinga {
             )
         }
 
+        if (req.params.host.includes('location')) {
+            const position = [
+                {
+                    latitude: 60.339699,
+                    longitude: 5.264482
+                },
+                {
+                    latitude: 60.370045,
+                    longitude: 5.227970
+                },
+                {
+                    latitude: 60.439713,
+                    longitude: 5.325866
+                }
+            ];
+
+            let cp = position[counter];
+            counter++;
+            if (counter > 2) {
+                counter = 0;
+            }
+
+
+            return new JsonResponse({
+                    "results": [
+                        {
+                            "attrs": {
+                                "vars": position[counter],
+                            },
+                            "joins": {},
+                            "meta": {},
+                            "name": "ncp20.cp.fake.efkon.no!location",
+                            "type": "Service"
+                        }
+                    ]
+                }
+            );
+        }
+
         return new JsonResponse(
             {
                 "results": [
@@ -107,32 +146,6 @@ export class Icinga {
             }
         )
 
-    }
-
-    @Route("/chargingPointPosition/", HttpMethod.GET)
-    getChargingPointPosition(req, res) {
-        const position = [
-            {
-                lat: 60.339699,
-                lng: 5.264482
-            },
-            {
-                lat: 60.370045,
-                lng: 5.227970
-            },
-            {
-                lat: 60.439713,
-                lng: 5.325866
-            }
-        ];
-
-        let cp = position[counter];
-        counter++;
-        if (counter > 2) {
-            counter = 0;
-        }
-
-        return new JsonResponse(cp);
     }
 
     @Route("/chargingPointTransactions/", HttpMethod.GET)
