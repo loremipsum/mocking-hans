@@ -12,7 +12,7 @@
 <ul id="messages"></ul>
 
 <script>
-    let ws = new WebSocket("ws://hans:65000/efkon/no/dc/ctrl/cmd/transactions/get");
+    let ws = new WebSocket("ws://10.1.0.200:8000/efkon/no/dc/ctrl/cmd/transactions/get");
     ws.onopen = function () {
         appendMessage('connection', 'open');
     };

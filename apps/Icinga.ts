@@ -12,7 +12,7 @@ let counter = 0;
 })
 export class Icinga {
     @Route("/v1/objects/hostgroups", HttpMethod.GET)
-    getTollSystemName(req, res) {
+    getTollSystemName(req) {
         let name = req.query.filter.replace('match("', '').replace('*",hostgroup.name)', '');
         return new JsonResponse(
             {
@@ -33,7 +33,7 @@ export class Icinga {
     }
 
     @Route("/v1/objects/services/:host", HttpMethod.GET)
-    getServices(req, res) {
+    getServices(req) {
         let status = [
             '0',
             '1',
@@ -77,7 +77,7 @@ export class Icinga {
                                     }
                                 },
                                 "last_hard_state": state,
-                                "next_check": 1542794672.0299999714
+                                "next_check": 1542794612.0500000
                             },
                             "joins": {},
                             "meta": {},
@@ -105,7 +105,6 @@ export class Icinga {
                 }
             ];
 
-            let cp = position[counter];
             counter++;
             if (counter > 2) {
                 counter = 0;
@@ -133,9 +132,35 @@ export class Icinga {
                 "results": [
                     {
                         "attrs": {
-                            "host_name": "fake.efkon.no",
+                            "last_check_result": {
+                                "active": true,
+                                "check_source": "norway-monitoring-1.efkon.com",
+                                "command": null,
+                                "execution_end": 1542794612.030436039,
+                                "execution_start": 1544431280.3405408859,
+                                "exit_status": 0.0,
+                                "output": "Check was successful.",
+                                "performance_data": [],
+                                "schedule_end": 1544431280.3405539989,
+                                "schedule_start": 1544431280.3400001526,
+                                "state": 0.0,
+                                "ttl": 0.0,
+                                "type": "CheckResult",
+                                "vars_after": {
+                                    "attempt": 1.0,
+                                    "reachable": true,
+                                    "state": 0.0,
+                                    "state_type": 1.0
+                                },
+                                "vars_before": {
+                                    "attempt": 1.0,
+                                    "reachable": true,
+                                    "state": status[Math.floor(Math.random() * status.length)],
+                                    "state_type": 1.0
+                                }
+                            },
                             "last_hard_state": state,
-                            "next_check": 1542792309.9918391705
+                            "next_check": 1542794612.0500000
                         },
                         "joins": {},
                         "meta": {},
@@ -145,24 +170,5 @@ export class Icinga {
                 ]
             }
         )
-
-    }
-
-    @Route("/chargingPointTransactions/", HttpMethod.GET)
-    getChargingPointTransactions(req, res) {
-        const transactions = [
-            {
-                uuid: '123e4567-e89b-12d3-a456-426655440000',
-                begin: '1994-11-05T13:15:30.567Z',
-                end: '1994-11-05T13:15:30.567Z'
-            },
-            {
-                uuid: '123e4567-e89b-12d3-a456-426655440000',
-                begin: '1994-11-05T13:15:30.567Z',
-                end: '1994-11-05T13:15:30.567Z'
-            },
-        ];
-
-        return new JsonResponse(transactions);
     }
 }
