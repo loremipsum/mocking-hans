@@ -3,10 +3,14 @@ import {Response} from "./Response/Response";
 import {JsonResponse} from "./Response/JsonResponse";
 import {XmlFromJsonResponse} from "./Response/XmlFromJsonResponse";
 import {SocketRegistry} from "./Registry/SocketRegistry";
+import {WebsocketRegistry} from "./Registry/WebsocketRegistry";
+import * as url from "url";
+import WebSocket = require("ws");
 
 const express = require('express');
-const chalk   = require('chalk');
-const morgan  = require('morgan');
+const chalk = require('chalk');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 // Let's be honest here: I've always wanted to name class "Hans".
 export class Hans {
@@ -16,6 +20,8 @@ export class Hans {
     public async bootstrap() {
         this.apps.forEach(app => {
             const expressApp = express();
+            expressApp.use(express.static('public'));
+            expressApp.use(bodyParser.json());
 
             const port = Reflect.getMetadata('port', app);
             const name = Reflect.getMetadata('name', app);
@@ -29,6 +35,7 @@ export class Hans {
 
             const io = require('socket.io')(server);
             this.registerSockets(app, io);
+            this.registerWebsockets(app, server);
             this.registerRoutes(app, expressApp, io);
         });
     }
@@ -36,37 +43,72 @@ export class Hans {
     private registerSockets(app, io) {
         SocketRegistry
             .getSockets()
-            .filter(s => s.target.constructor.name === app.name).forEach(socket => {
-            const s = io.of(socket.namespace);
-            s.on(socket.event, (sock) => socket.target[socket.property](sock));
-        });
+            .filter(s => s.target.constructor.name === app.name)
+            .forEach(socket => {
+                const s = io.of(socket.namespace);
+                s.on(socket.event, (sock) => socket.target[socket.property](sock));
+            });
+    }
+
+    private registerWebsockets(app, server) {
+        const port = Reflect.getMetadata('port', app);
+        const name = Reflect.getMetadata('name', app);
+
+        WebsocketRegistry
+            .getSockets()
+            .filter(s => s.target.constructor.name === app.name)
+            .forEach(websocket => {
+                const wss = new WebSocket.Server({
+                    noServer: true,
+                    perMessageDeflate: false
+                });
+
+                wss.on(websocket.event, function (ws) {
+                    websocket.target[websocket.property](ws);
+                });
+
+                server.on('upgrade', function (request, socket, head) {
+                    if (url.parse(request.url).pathname !== websocket.namespace) {
+                        return;
+                    }
+                    console.info(`${chalk.underline(name)} (:${port}): ` + [
+                        'WS',
+                        chalk.bold(websocket.event),
+                        websocket.namespace,
+                    ].join(' '));
+                    wss.handleUpgrade(request, socket, head, function done(ws) {
+                        wss.emit(websocket.event, ws, request);
+                    });
+                });
+            });
     }
 
     private registerRoutes(app, expressApp, io) {
         RouteRegistry
             .getRoutes()
-            .filter(r => r.target.constructor.name === app.name).forEach((route) => {
-            expressApp[route.httpMethod](route.path, (req, res, next) => {
-                const cb = route.target[route.property](req, res, next, io);
+            .filter(r => r.target.constructor.name === app.name)
+            .forEach((route) => {
+                expressApp[route.httpMethod](route.path, (req, res, next) => {
+                    const cb = route.target[route.property](req, res, next, io);
 
-                if (!(cb instanceof Response)) {
-                    return cb;
-                }
+                    if (!(cb instanceof Response)) {
+                        return cb;
+                    }
 
-                res.status(cb.getStatusCode());
-                res.set(cb.getHeaders());
+                    res.status(cb.getStatusCode());
+                    res.set(cb.getHeaders());
 
-                if (cb instanceof JsonResponse) {
-                    return res.json(cb.getData());
-                }
+                    if (cb instanceof JsonResponse) {
+                        return res.json(cb.getData());
+                    }
 
-                if (cb instanceof XmlFromJsonResponse) {
-                    res.set('Content-Type', 'text/xml');
-                }
+                    if (cb instanceof XmlFromJsonResponse) {
+                        res.set('Content-Type', 'text/xml');
+                    }
 
-                return res.send(cb.getContent());
+                    return res.send(cb.getContent());
+                });
             });
-        });
     }
 
     private applyLogger(expressApp, name, port) {

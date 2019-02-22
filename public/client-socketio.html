@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mocking Hans</title>
+</head>
+<body>
+<h1>Hans.</h1>
+<h2>socket.io</h2>
+
+<button id="subscribe">Mock the Hans.</button>
+<ul id="messages"></ul>
+
+<script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+<script>
+    const socket = io.connect('ws://hans:4999');
+
+    // Whenever "news" is published from the socket append the message to our messages list
+    socket.on('news', data => {
+        console.log(data);
+        appendMessage('incoming message', data.message);
+    });
+
+    // In case of clicking on the subscribe button we're going to connect to a different namespace
+    document.getElementById('subscribe').addEventListener('click', () => {
+        const topic = io('ws://hans:4999/news');
+        topic.on('news', data => {
+            console.log(data);
+        });
+    });
+
+    function appendMessage(prefix, message) {
+        const node = document.createElement('li');
+        node.appendChild(document.createTextNode(prefix + ': ' + message));
+        document.getElementById('messages').appendChild(node);
+    }
+</script>
+</body>
+</html>
