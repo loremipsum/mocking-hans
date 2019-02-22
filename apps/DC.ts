@@ -39,9 +39,9 @@ export class DC {
                 'isenvironmental': this.getRandomBooleanValue(),
                 'missmatchedlpn': this.getRandomBooleanValue(),
                 'hastrailer': this.getRandomBooleanValue(),
-                'tagstatusflag': this.getRandomStatusFlag(),
-                'signalcode': this.getRandomSignalCode(),
-                'classes': this.getRandomClass(),
+                'tagstatusflag': this.getRandomStatusFlags(),
+                'signalcode': this.getRandomSignalCodes(),
+                'classes': this.getRandomClasses(),
                 'quantity': 42
             }
         });
@@ -50,6 +50,23 @@ export class DC {
     @Route("/1.0.0/cp/:cpid/:cpsystem/target_spottest", HttpMethod.POST)
     public setSpotTestMode() {
         return this.getSpotTestModeConfiguration();
+    }
+
+    @Route("/1.0.0/cp/:cpid/current_power", HttpMethod.GET)
+    public getPowerState() {
+        return new JsonResponse({
+            primary: {
+                gantry: this.getRandomBooleanValue(),
+                cpc: this.getRandomBooleanValue()
+            },
+            secondary: {
+                gantry: this.getRandomBooleanValue(),
+                cpc: this.getRandomBooleanValue()
+            },
+            vms1: this.getRandomBooleanValue(),
+            vms2: this.getRandomBooleanValue(),
+            timestamp: this.generateTimestamp()
+        });
     }
 
     private validateRequest(req) {
@@ -62,8 +79,24 @@ export class DC {
         return this.getRandomValueFromArray(['car', 'van', 'truck', 'bus', 'motorcycle']);
     }
 
+    private getRandomClasses() {
+        const classes = [];
+        for (let i = 0; i <= this.getRandomNumberBetween(1, 3); i++) {
+            classes.push(this.getRandomClass());
+        }
+        return classes;
+    }
+
     private getRandomSignalCode() {
         return this.getRandomValueFromArray(['02', '08', '10', '20', '22', '23', '25', '28', '40', '41', '42']);
+    }
+
+    private getRandomSignalCodes() {
+        const classes = [];
+        for (let i = 0; i <= this.getRandomNumberBetween(1, 3); i++) {
+            classes.push(this.getRandomSignalCode());
+        }
+        return classes;
     }
 
     private getRandomTransaction() {
@@ -72,6 +105,14 @@ export class DC {
 
     private getRandomStatusFlag() {
         return this.getRandomValueFromArray(['wanted', 'video']);
+    }
+
+    private getRandomStatusFlags() {
+        const classes = [];
+        for (let i = 0; i <= this.getRandomNumberBetween(1, 2); i++) {
+            classes.push(this.getRandomStatusFlag());
+        }
+        return classes;
     }
 
     private getRandomBooleanValue() {
@@ -84,6 +125,10 @@ export class DC {
 
     private getRandomValueFromArray(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    private getRandomNumberBetween(min: number, max: number) {
+        return Math.floor((Math.random() * max) + min);
     }
 
     /**
