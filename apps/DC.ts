@@ -70,6 +70,13 @@ export class DC {
         });
     }
 
+    @Route("/1.0.0/cp/:cpid", HttpMethod.POST)
+    public triggerPowerCycle(req) {
+        return new JsonResponse({
+            action: req.body.action
+        });
+    }
+
     private validateRequest(req) {
         if (req.params.cpsystem && ['p', 's'].indexOf(req.params.cpsystem) < 0) {
             throw new Error('Invalid cpsystem (allowed are either "p" or "s")');
