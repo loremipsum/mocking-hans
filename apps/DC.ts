@@ -48,7 +48,8 @@ export class DC {
     }
 
     @Route("/1.0.0/cp/:cpid/:cpsystem/target_spottest", HttpMethod.POST)
-    public setSpotTestMode() {
+    public setSpotTestMode(req) {
+        console.log(req.body);
         return this.getSpotTestModeConfiguration();
     }
 

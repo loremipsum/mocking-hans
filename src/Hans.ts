@@ -10,6 +10,7 @@ import WebSocket = require("ws");
 const express = require('express');
 const chalk = require('chalk');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 // Let's be honest here: I've always wanted to name class "Hans".
 export class Hans {
@@ -20,6 +21,7 @@ export class Hans {
         this.apps.forEach(app => {
             const expressApp = express();
             expressApp.use(express.static('public'));
+            expressApp.use(bodyParser.json());
 
             const port = Reflect.getMetadata('port', app);
             const name = Reflect.getMetadata('name', app);
