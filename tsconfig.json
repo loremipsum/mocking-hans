@@ -9,8 +9,7 @@
         "sourceMap": true,
         "inlineSources": true,
         "types": [
-            "node",
-            "ws"
+            "node"
         ],
         "experimentalDecorators": true
     }
