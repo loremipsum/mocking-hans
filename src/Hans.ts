@@ -3,6 +3,9 @@ import {Response} from "./Response/Response";
 import {JsonResponse} from "./Response/JsonResponse";
 import {XmlFromJsonResponse} from "./Response/XmlFromJsonResponse";
 import {SocketRegistry} from "./Registry/SocketRegistry";
+import {WebsocketRegistry} from "./Registry/WebsocketRegistry";
+import * as url from "url";
+import WebSocket = require("ws");
 
 const express = require('express');
 const chalk   = require('chalk');
@@ -29,6 +32,7 @@ export class Hans {
 
             const io = require('socket.io')(server);
             this.registerSockets(app, io);
+            this.registerWebsockets(app, server);
             this.registerRoutes(app, expressApp, io);
         });
     }
@@ -40,6 +44,39 @@ export class Hans {
             const s = io.of(socket.namespace);
             s.on(socket.event, (sock) => socket.target[socket.property](sock));
         });
+    }
+
+    private registerWebsockets(app, server) {
+        const port = Reflect.getMetadata('port', app);
+        const name = Reflect.getMetadata('name', app);
+
+        WebsocketRegistry
+            .getSockets()
+            .filter(s => s.target.constructor.name === app.name)
+            .forEach(websocket => {
+                const wss = new WebSocket.Server({
+                    noServer: true,
+                    perMessageDeflate: false
+                });
+
+                wss.on(websocket.event, function (ws) {
+                    websocket.target[websocket.property](ws);
+                });
+
+                server.on('upgrade', function (request, socket, head) {
+                    if (url.parse(request.url).pathname !== websocket.namespace) {
+                        return;
+                    }
+                    console.info(`${chalk.underline(name)} (:${port}): ` + [
+                        'WS',
+                        chalk.bold(websocket.event),
+                        websocket.namespace,
+                    ].join(' '));
+                    wss.handleUpgrade(request, socket, head, function done(ws) {
+                        wss.emit(websocket.event, ws, request);
+                    });
+                });
+            });
     }
 
     private registerRoutes(app, expressApp, io) {
