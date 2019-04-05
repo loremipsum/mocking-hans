@@ -3,7 +3,7 @@ import {Metadata} from '@loremipsum/mocking-hans/model';
 
 export const App = (options: {
   name: string,
-  port: number
+  port: number,
 }): ClassDecorator => {
   return (target: any): void => {
     Reflect.defineMetadata(Metadata.Name, options.name, target);
@@ -13,7 +13,7 @@ export const App = (options: {
     [
       Metadata.NativeSocketRoutes,
       Metadata.SocketIORoutes,
-      Metadata.Routes
+      Metadata.Routes,
     ].forEach(metadata => {
       if (! Reflect.hasMetadata(metadata, target)) {
         Reflect.defineMetadata(metadata, [], target);

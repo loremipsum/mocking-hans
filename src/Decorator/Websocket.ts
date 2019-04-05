@@ -12,7 +12,7 @@ export const Websocket = (event: string, namespace: string = '/'): MethodDecorat
     sockets.push({
       event,
       namespace,
-      methodName: propertyKey
+      methodName: propertyKey,
     });
   };
 };
