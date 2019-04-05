@@ -1,16 +1,16 @@
 export class Response {
-    constructor(protected content: any = '', protected statusCode: number = 200, protected headers = []) {
-    }
+  constructor(protected content: any = '', protected statusCode: number = 200, protected headers = []) {
+  }
 
-    getContent() {
-        return this.content;
-    }
+  public getContent() {
+    return this.content;
+  }
 
-    getStatusCode() {
-        return this.statusCode;
-    }
+  public getStatusCode() {
+    return this.statusCode;
+  }
 
-    getHeaders() {
-        return this.headers;
-    }
+  public getHeaders() {
+    return this.headers;
+  }
 }
