@@ -125,7 +125,7 @@ export class Hans {
   }
 
   private getAppInstance(app: { new(...args: any[]) }) {
-    const name = Reflect.getMetadata('name', app);
+    const name = Reflect.getMetadata(Metadata.Name, app);
 
     if (!this.appInstances.has(name)) {
       this.appInstances.set(name, new app());
