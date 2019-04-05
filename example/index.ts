@@ -3,13 +3,15 @@ import {Hans} from '@loremipsum/mocking-hans';
 import {Example} from './apps/Example';
 import {Twitter} from './apps/Twitter';
 import {WS} from './apps/WS';
+import {Faker} from './apps/Faker';
 
 const chalk = require('chalk');
 
 const apps = [
   Example,
   Twitter,
-  WS
+  WS,
+  Faker
 ];
 
 (new Hans(apps)).bootstrap().then(() => {
