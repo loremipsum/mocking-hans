@@ -1,6 +1,7 @@
 import {Get, App} from '@loremipsum/mocking-hans/decorators';
 import {JsonResponse} from '@loremipsum/mocking-hans';
 import * as faker from 'faker';
+import {Helper} from '@loremipsum/mocking-hans/utility';
 
 @App({
   name: 'faker',
@@ -36,6 +37,32 @@ export class Faker {
       past: faker.date.past(),
       soon: faker.date.future(0.1, new Date()),
       between: faker.date.between(faker.date.past(), new Date()),
+    });
+  }
+
+  @Get('/probability')
+  public probability() {
+    const elements = [{
+      element: 'foo',
+      probability: 0.2
+    }, {
+      element: 'bar',
+      probability: 0.7
+    }, {
+      element: 'lorem',
+      probability: 0.1
+    }];
+
+    const distribution = { 'foo': 0, 'bar': 0, 'lorem': 0 };
+    for(let i = 1; i <= 1000; i++) {
+      const e = Helper.getRandomElementByProbability(elements);
+      distribution[e.element]++;
+    }
+
+    return new JsonResponse({
+      elements,
+      current: Helper.getRandomElementByProbability(elements),
+      distributionFor1k: distribution
     });
   }
 }
