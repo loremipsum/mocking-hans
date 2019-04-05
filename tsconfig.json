@@ -13,12 +13,12 @@
       "ws"
     ],
     "experimentalDecorators": true,
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
-      "@loremipsum/mocking-hans/decorators/*": ["Decorator*"],
-      "@loremipsum/mocking-hans/model/*": ["Model*"],
-      "@loremipsum/mocking-hans/response/*": ["Response*"],
-      "@loremipsum/mocking-hans/*": ["*"]
+      "@loremipsum/mocking-hans/decorators": ["Decorator/"],
+      "@loremipsum/mocking-hans/model": ["Model/"],
+      "@loremipsum/mocking-hans/response": ["Response/"],
+      "@loremipsum/mocking-hans": ["./"]
     }
   }
 }

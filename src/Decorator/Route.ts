@@ -1,7 +1,5 @@
 import 'reflect-metadata';
-import {HttpMethod} from '../Model';
-import {RouteDefinition} from '../Model';
-import {Metadata} from '../Model';
+import {HttpMethod, RouteDefinition, Metadata} from '@loremipsum/mocking-hans/model';
 
 const addRoute = (path: string, requestMethod: HttpMethod, target: object, methodName: string) => {
   if (!Reflect.getMetadata(Metadata.Routes, target.constructor)) {

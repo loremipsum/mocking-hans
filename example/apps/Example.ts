@@ -1,5 +1,5 @@
-import {Get, App, Socket} from '@loremipsum/mocking-hans/Decorator';
-import {Response, XmlFromJsonResponse, JsonResponse} from '@loremipsum/mocking-hans/Response';
+import {Get, App, Socket} from '@loremipsum/mocking-hans/decorators';
+import {Response, XmlFromJsonResponse, JsonResponse} from '@loremipsum/mocking-hans/response';
 import * as path from 'path';
 
 @App({

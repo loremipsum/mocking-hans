@@ -1,4 +1,4 @@
-import {HttpMethod} from './HttpMethod';
+import {HttpMethod} from '@loremipsum/mocking-hans/model';
 
 export interface RouteDefinition {
   // Path to our route
