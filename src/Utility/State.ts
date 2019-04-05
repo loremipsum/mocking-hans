@@ -1,8 +1,8 @@
 export class State {
   private state: Map<string, any> = new Map<string, any>();
 
-  public get(key: string, fallback: any = undefined) {
-    if (! this.has(key)) {
+  public get(key: string, fallback: any = null) {
+    if (! this.has(key) && fallback) {
       return fallback;
     }
 
