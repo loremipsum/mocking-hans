@@ -18,6 +18,7 @@
       "@loremipsum/mocking-hans/decorators": ["Decorator/"],
       "@loremipsum/mocking-hans/model": ["Model/"],
       "@loremipsum/mocking-hans/response": ["Response/"],
+      "@loremipsum/mocking-hans/utility": ["Utility/"],
       "@loremipsum/mocking-hans": ["./"]
     }
   }
