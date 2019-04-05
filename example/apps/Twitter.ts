@@ -1,6 +1,5 @@
-import {App} from "../../src/Decorator/App";
-import {JsonResponse} from "../../src/Response/JsonResponse";
-import {Get} from '../../src/Decorator/Route';
+import {App, Get} from '@loremipsum/mocking-hans/decorators';
+import {JsonResponse} from '@loremipsum/mocking-hans/response';
 
 @App({
     name: 'twitter',

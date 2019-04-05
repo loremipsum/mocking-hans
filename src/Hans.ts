@@ -1,16 +1,12 @@
 import 'reflect-metadata';
-import {Response} from './Response/Response';
-import {RouteDefinition} from './Model/RouteDefinition';
-import {JsonResponse} from './Response/JsonResponse';
-import {XmlFromJsonResponse} from './Response/XmlFromJsonResponse';
+import {Metadata, RouteDefinition, SocketDefinition} from '@loremipsum/mocking-hans/model';
+import {JsonResponse, Response, XmlFromJsonResponse} from '@loremipsum/mocking-hans/response';
 import chalk from 'chalk';
 import WebSocket = require('ws');
 import * as url from 'url';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
-import {Metadata} from './Model/Metadata';
-import {SocketDefinition} from './Model/SocketDefinition';
 
 // Let's be honest here: I've always wanted to name a class "Hans".
 export class Hans {

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {Metadata} from '../Model';
+import {Metadata} from '@loremipsum/mocking-hans/model';
 
 export const App = (options: {
   name: string,

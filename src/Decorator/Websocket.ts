@@ -1,6 +1,5 @@
 import 'reflect-metadata';
-import {Metadata} from '../Model';
-import {SocketDefinition} from '../Model';
+import {Metadata, SocketDefinition} from '@loremipsum/mocking-hans/model';
 
 export const Websocket = (event: string, namespace: string = '/'): MethodDecorator => {
   return (target: any, propertyKey: string): void => {
