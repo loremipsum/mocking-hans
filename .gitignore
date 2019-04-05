@@ -1,6 +1,7 @@
 .settings
 nbproject/
 .idea
+dist
 
 node_modules
 

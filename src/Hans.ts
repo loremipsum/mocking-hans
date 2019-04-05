@@ -1,29 +1,32 @@
-import {RouteRegistry} from './Registry/RouteRegistry';
+import 'reflect-metadata';
 import {Response} from './Response/Response';
+import {RouteDefinition} from './Model/RouteDefinition';
 import {JsonResponse} from './Response/JsonResponse';
 import {XmlFromJsonResponse} from './Response/XmlFromJsonResponse';
-import {SocketRegistry} from './Registry/SocketRegistry';
-import {WebsocketRegistry} from './Registry/WebsocketRegistry';
 import chalk from 'chalk';
 import WebSocket = require('ws');
 import * as url from 'url';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
+import {Metadata} from './Model/Metadata';
+import {SocketDefinition} from './Model/SocketDefinition';
 
 // Let's be honest here: I've always wanted to name a class "Hans".
 export class Hans {
-  constructor(protected apps) {
+  private appInstances: Map<string, object> = new Map<string, object>();
+
+  constructor(protected apps: Array<{ new(...args: any[]) }>) {
   }
 
   public async bootstrap() {
     this.apps.forEach((app) => {
-      const expressApp = express();
+      const expressApp: express.Application = express();
       expressApp.use(express.static('public'));
       expressApp.use(bodyParser.json());
 
-      const port = Reflect.getMetadata('port', app);
-      const name = Reflect.getMetadata('name', app);
+      const port = Reflect.getMetadata(Metadata.Port, app);
+      const name = Reflect.getMetadata(Metadata.Name, app);
 
       this.applyLogger(expressApp, name, port);
 
@@ -41,54 +44,55 @@ export class Hans {
   }
 
   private registerSockets(app, io) {
-    SocketRegistry
-      .getSockets()
-      .filter(s => s.target.constructor.name === app.name).forEach(socket => {
+    const sockets  = Reflect.getMetadata(Metadata.SocketIORoutes, app) as Array<SocketDefinition>;
+    const instance = this.getAppInstance(app);
+
+    sockets.forEach(socket => {
       const s = io.of(socket.namespace);
-      s.on(socket.event, (sock) => socket.target[socket.property](sock));
+      s.on(socket.event, sock => instance[socket.methodName](sock));
     });
   }
 
   private registerWebsockets(app, server) {
-    const port = Reflect.getMetadata('port', app);
-    const name = Reflect.getMetadata('name', app);
+    const sockets  = Reflect.getMetadata(Metadata.NativeSocketRoutes, app) as Array<SocketDefinition>;
+    const port     = Reflect.getMetadata(Metadata.Port, app);
+    const name     = Reflect.getMetadata(Metadata.Name, app);
+    const instance = this.getAppInstance(app);
 
-    WebsocketRegistry
-      .getSockets()
-      .filter(s => s.target.constructor.name === app.name)
-      .forEach(websocket => {
-        const wss = new WebSocket.Server({
-          noServer: true,
-          perMessageDeflate: false,
-        });
+    sockets.forEach(websocket => {
+      const wss = new WebSocket.Server({
+        noServer: true,
+        perMessageDeflate: false,
+      });
 
-        wss.on(websocket.event, function (ws) {
-          websocket.target[websocket.property](ws);
-        });
+      wss.on(websocket.event, function (ws) {
+        instance[websocket.methodName](ws);
+      });
 
-        server.on('upgrade', function (request, socket, head) {
-          if (url.parse(request.url).pathname !== websocket.namespace) {
-            return;
-          }
-          // tslint:disable-next-line
-          console.info(`${chalk.underline(name)} (:${port}): ` + [
-            'WS',
-            chalk.bold(websocket.event),
-            websocket.namespace,
-          ].join(' '));
-          wss.handleUpgrade(request, socket, head, function done(ws) {
-            wss.emit(websocket.event, ws, request);
-          });
+      server.on('upgrade', function (request, socket, head) {
+        if (url.parse(request.url).pathname !== websocket.namespace) {
+          return;
+        }
+        // tslint:disable-next-line
+        console.info(`${chalk.underline(name)} (:${port}): ` + [
+          'WS',
+          chalk.bold(websocket.event),
+          websocket.namespace,
+        ].join(' '));
+        wss.handleUpgrade(request, socket, head, function done(ws) {
+          wss.emit(websocket.event, ws, request);
         });
       });
+    });
   }
 
   private registerRoutes(app, expressApp, io) {
-    RouteRegistry
-      .getRoutes()
-      .filter(r => r.target.constructor.name === app.name).forEach((route) => {
-      expressApp[route.httpMethod](route.path, (req, res, next) => {
-        const cb = route.target[route.property](req, res, next, io);
+    const routes   = Reflect.getMetadata(Metadata.Routes, app) as Array<RouteDefinition>;
+    const instance = this.getAppInstance(app);
+
+    routes.forEach(route => {
+      expressApp[route.requestMethod](route.path, (req, res, next) => {
+        const cb = instance[route.methodName](req, res, next, io);
 
         if (!(cb instanceof Response)) {
           return cb;
@@ -122,5 +126,15 @@ export class Hans {
         'ms',
       ].join(' ');
     }));
+  }
+
+  private getAppInstance(app: { new(...args: any[]) }) {
+    const name = Reflect.getMetadata('name', app);
+
+    if (!this.appInstances.has(name)) {
+      this.appInstances.set(name, new app());
+    }
+
+    return this.appInstances.get(name);
   }
 }

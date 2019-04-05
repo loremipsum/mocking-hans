@@ -1,16 +1,23 @@
 import 'reflect-metadata';
+import {Metadata} from '../Model';
 
 export const App = (options: {
   name: string,
-  port: number,
-  sockets?: {
-    enabled: boolean,
-    callback?: () => void,
-  },
+  port: number
 }): ClassDecorator => {
   return (target: any): void => {
-    Reflect.defineMetadata('name', options.name, target);
-    Reflect.defineMetadata('port', options.port, target);
-    Reflect.defineMetadata('sockets', options.sockets, target);
+    Reflect.defineMetadata(Metadata.Name, options.name, target);
+    Reflect.defineMetadata(Metadata.Port, options.port, target);
+
+    // In case an app doesn't make use of these metadata keys set the default values for them
+    [
+      Metadata.NativeSocketRoutes,
+      Metadata.SocketIORoutes,
+      Metadata.Routes
+    ].forEach(metadata => {
+      if (! Reflect.hasMetadata(metadata, target)) {
+        Reflect.defineMetadata(metadata, [], target);
+      }
+    });
   };
 };

@@ -5,6 +5,9 @@
     "ordered-imports": false,
     "arrow-parens": false,
     "only-arrow-functions": false,
-    "space-before-function-paren": false
+    "space-before-function-paren": false,
+    "object-literal-sort-keys": false,
+    "array-type": false,
+    "interface-name": false
   }
 }
