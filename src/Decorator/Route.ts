@@ -6,6 +6,10 @@ const addRoute = (path: string, requestMethod: HttpMethod, target: object, metho
     Reflect.defineMetadata(Metadata.Routes, [], target.constructor);
   }
 
+  if (!path.startsWith('/')) {
+    path = `/${path}`;
+  }
+
   const routes = Reflect.getMetadata(Metadata.Routes, target.constructor) as Array<RouteDefinition>;
 
   routes.push({
