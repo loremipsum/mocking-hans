@@ -4,10 +4,10 @@ import {JsonResponse} from './Response/JsonResponse';
 import {XmlFromJsonResponse} from './Response/XmlFromJsonResponse';
 import {SocketRegistry} from './Registry/SocketRegistry';
 import {WebsocketRegistry} from './Registry/WebsocketRegistry';
-import * as url from 'url';
-import WebSocket = require('ws');
-import * as express from 'express';
 import chalk from 'chalk';
+import WebSocket = require('ws');
+import * as url from 'url';
+import * as express from 'express';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 
