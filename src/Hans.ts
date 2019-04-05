@@ -7,6 +7,8 @@ import * as url from 'url';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
+import {FileResponse} from './Response/FileResponse';
+import * as path from 'path';
 
 // Let's be honest here: I've always wanted to name a class "Hans".
 export class Hans {
@@ -96,6 +98,12 @@ export class Hans {
 
         res.status(cb.getStatusCode());
         res.set(cb.getHeaders());
+
+        if (cb instanceof FileResponse) {
+          return res.sendFile(
+            path.join(__dirname, '../public', cb.getFilename())
+          );
+        }
 
         if (cb instanceof JsonResponse) {
           return res.json(cb.getData());

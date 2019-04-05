@@ -1,6 +1,5 @@
 import {Get, App, Socket} from '@loremipsum/mocking-hans/decorators';
-import {Response, XmlFromJsonResponse, JsonResponse} from '@loremipsum/mocking-hans/response';
-import * as path from 'path';
+import {Response, XmlFromJsonResponse, JsonResponse, FileResponse} from '@loremipsum/mocking-hans/response';
 
 @App({
   name: 'example',
@@ -55,15 +54,9 @@ export class Example {
     });
   }
 
-  /**
-   * Serving files via the `res` object is also possible.
-   *
-   * @param req
-   * @param res
-   */
   @Get('/file')
-  file(req, res) {
-    return res.sendFile(path.resolve('client.html'));
+  file() {
+    return new FileResponse('a_random_hans.jpg');
   }
 
   /**
