@@ -1,11 +1,17 @@
 import {Get, App, Socket} from '@loremipsum/mocking-hans/decorators';
 import {Response, XmlFromJsonResponse, JsonResponse, FileResponse} from '@loremipsum/mocking-hans/response';
+import {State} from '@loremipsum/mocking-hans/utility';
 
 @App({
   name: 'example',
   port: 4999
 })
 export class Example {
+  private localState: State = new State();
+
+  constructor(private globalState: State) {
+  }
+
   /**
    * A simple text response
    */
@@ -22,6 +28,23 @@ export class Example {
     return new JsonResponse({
       foo: 'bar'
     }, 400);
+  }
+
+  /**
+   * State demonstration
+   */
+  @Get('/state')
+  stateExample() {
+    let counter = this.localState.get('counter', 0);
+    let globalCounter = this.globalState.get('counter', 0);
+
+    this.localState.set('counter', counter + 1);
+    this.globalState.set('counter', globalCounter + 1);
+
+    return new JsonResponse({
+      localState: this.localState.get('counter'),
+      globalState: this.globalState.get('counter')
+    });
   }
 
   /**
