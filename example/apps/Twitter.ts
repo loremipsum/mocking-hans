@@ -1,14 +1,13 @@
-import {App} from "../src/Decorator/App";
-import {Route} from "../src/Decorator/Route";
-import {HttpMethod} from "../src/Enum/HttpMethod";
-import {JsonResponse} from "../src/Response/JsonResponse";
+import {App} from "../../src/Decorator/App";
+import {JsonResponse} from "../../src/Response/JsonResponse";
+import {Get} from '../../src/Decorator/Route';
 
 @App({
     name: 'twitter',
     port: 61000
 })
 export class Twitter {
-    @Route("/1.1/search/tweets.json", HttpMethod.GET)
+    @Get("/1.1/search/tweets.json")
     getTweets() {
         return new JsonResponse({
             "statuses": [
