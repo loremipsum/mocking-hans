@@ -110,7 +110,7 @@ export class Hans {
         }
 
         if (cb instanceof JsonResponse) {
-          return res.json(cb.getData());
+          return res.json(cb.getContent());
         }
 
         if (cb instanceof XmlFromJsonResponse) {

@@ -1,5 +1,11 @@
 import {Get, App, Socket} from '@loremipsum/mocking-hans/decorators';
-import {Response, XmlFromJsonResponse, JsonResponse, FileResponse} from '@loremipsum/mocking-hans/response';
+import {
+  Response,
+  XmlFromJsonResponse,
+  JsonResponse,
+  FileResponse,
+  TemplateResponse
+} from '@loremipsum/mocking-hans/response';
 import {State} from '@loremipsum/mocking-hans/utility';
 
 @App({
@@ -44,6 +50,17 @@ export class Example {
     return new JsonResponse({
       localState: this.localState.get('counter'),
       globalState: this.globalState.get('counter')
+    });
+  }
+
+  /**
+   * Templated responses with placeholders
+   */
+  @Get('/templated')
+  templated() {
+    return new TemplateResponse(require(__dirname + '/../hans.json'), {
+      message: 'hello there',
+      name: 'john doe'
     });
   }
 
