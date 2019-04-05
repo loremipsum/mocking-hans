@@ -100,9 +100,7 @@ export class Hans {
         res.set(cb.getHeaders());
 
         if (cb instanceof FileResponse) {
-          return res.sendFile(
-            path.join(__dirname, '../public', cb.getFilename())
-          );
+          return res.sendFile(path.join(__dirname, '../public', cb.getFilename()));
         }
 
         if (cb instanceof JsonResponse) {
