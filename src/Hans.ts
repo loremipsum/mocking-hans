@@ -9,10 +9,16 @@ import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import {FileResponse} from './Response/FileResponse';
 import * as path from 'path';
+import {State} from './Utility/State';
 
 // Let's be honest here: I've always wanted to name a class "Hans".
 export class Hans {
   private appInstances: Map<string, object> = new Map<string, object>();
+
+  /**
+   * Hans-wide state, shared across all applications; will be injected to application constructors as first argument.
+   */
+  private state: State = new State();
 
   constructor(protected apps: Array<{ new(...args: any[]) }>) {
   }
@@ -134,7 +140,7 @@ export class Hans {
     const name = Reflect.getMetadata(Metadata.Name, app);
 
     if (!this.appInstances.has(name)) {
-      this.appInstances.set(name, new app());
+      this.appInstances.set(name, new app(this.state));
     }
 
     return this.appInstances.get(name);
