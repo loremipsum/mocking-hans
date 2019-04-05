@@ -1,11 +1,11 @@
-import {Response} from "./Response";
+import {Response} from './Response';
 
 export class JsonResponse extends Response {
-    constructor(protected data = {}, statusCode: number = 200, headers = []) {
-        super('', statusCode, headers);
-    }
+  constructor(protected data = {}, statusCode: number = 200, headers = []) {
+    super('', statusCode, headers);
+  }
 
-    getData() {
-        return this.data;
-    }
+  public getData() {
+    return this.data;
+  }
 }

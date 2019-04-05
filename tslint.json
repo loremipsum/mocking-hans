@@ -1,0 +1,10 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "quotemark": false,
+    "ordered-imports": false,
+    "arrow-parens": false,
+    "only-arrow-functions": false,
+    "space-before-function-paren": false
+  }
+}
