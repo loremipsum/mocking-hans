@@ -2,23 +2,32 @@
 
 > You don't mock the Hans, he's mocking you.
 
+## Features
+
+- Multi-port/app API mocking
+- Express, Socket.io and native WebSocket support
+- Local and app-shared global state
+- Middleware support (for faking authentication, ...)
+- Common Response objects
+- [Faker](https://github.com/marak/Faker.js/) integration
+
 ## Installation
 
-1. Clone the repository
-2. Install npm dependencies (`npm install`)
-3. Start with `npm start`
+**TODO**: Write this.
 
 ## Usage
 
+Basically all features covered by Hans are implemented as an example within the `examples` directory. To run this 
+examples simply clone this repository, install the dependencies and run `npm run example`.
+
 ### Apps
 
-Apps, residing in `apps/`, represent a *single* interface. So let's say
-you're going to mock APIs for Facebook and Twitter you're going to have two Apps, one 
-for Facebook and one for Twitter.
+Apps represent a *single* API. For example, if you'd like to mock the Facebook and Twitter API you'd create two 
+different applications.
 
 #### Implementing Apps
 
-Apps must be decorated with the `@App` decorator:
+Apps **must** be decorated with the `@App` decorator:
 
 ```typescript
 @App({
@@ -26,12 +35,32 @@ Apps must be decorated with the `@App` decorator:
     port: 61000
 })
 export class Twitter {
+  @Get("/1.1/search/tweets.json")
+  getTweets() {
+      return new JsonResponse({
+          "statuses": [
+              {
+                  "created_at": "Sun Feb 25 18:11:01 +0000 2018",
+                  "id": 967824267948773377,
+                  "id_str": "967824267948773377",
+                  "text": "From pilot to astronaut, Robert H. Lawrence was the first African-American to be selected as an astronaut by any na… https://t.co/FjPEWnh804",
+                  "truncated": true
+              }
+          ]
+      })
+  }
 }
 ```
 
-Additionally you need to register your app within the `apps` array in the `index.ts` file.
+Additionally apps needs to be registered to Hans; registered apps are passed to Hans when instantiating the class, e.g.:
 
-Starting Hans now results in:
+```typescript
+(new Hans([Twitter])).bootstrap().then(() => {
+  console.log(chalk.blue(chalk.bold('\nAre you ready to ... MOCK?\n')));
+});
+```
+
+Starting Hans will now result in:
 
 ```
 > npm start
@@ -42,7 +71,8 @@ Starting Hans now results in:
 #### Implementing interfaces
 
 Even though your app is loaded, it doesn't expose any interfaces yet. Interfaces are 
-represented as single methods and need to be decorated with the `@Route` decorator. In 
+represented as single methods and need to be decorated with a proper decorator which represents the request 
+method (`@Get`, `@Post`, `@Put` or `@Delete`). In 
 case of our Twitter app you may are going for an implementation like:
 
 ```typescript
@@ -51,21 +81,21 @@ case of our Twitter app you may are going for an implementation like:
     port: 61000
 })
 export class Twitter {
-    @Route("/1.1/search/tweets.json", HttpMethod.GET)
-    getTweets() {
-        return new JsonResponse({
-            "statuses": [
-                {
-                    "created_at": "Sun Feb 25 18:11:01 +0000 2018",
-                    "id": 967824267948773377,
-                    "id_str": "967824267948773377",
-                    "text": "From pilot to astronaut, Robert H. Lawrence was the first African-American to be selected as an astronaut by any na… https://t.co/FjPEWnh804",
-                    "truncated": true,
-                    // even more fields
-                }
-            ]
-        })
-    }
+  @Get("/1.1/search/tweets.json")
+  getTweets() {
+    return new JsonResponse({
+      "statuses": [
+        {
+          "created_at": "Sun Feb 25 18:11:01 +0000 2018",
+          "id": 967824267948773377,
+          "id_str": "967824267948773377",
+          "text": "From pilot to astronaut, Robert H. Lawrence was the first African-American to be selected as an astronaut by any na… https://t.co/FjPEWnh804",
+          "truncated": true,
+          // even more fields
+        }
+      ]
+    })
+  }
 }
 ```
 
@@ -124,9 +154,10 @@ See `client-websocket.html` for an example of a client using the WebSocket API.
 
 ### API
 
-#### `@Route`
+#### `@Get`, `@Post`, `@Put` and `@Delete`
 
-`@Route` decorated methods do have up to three params:
+These decorators expose a method as an interface through the desired request method. Methods decorated with one of these 
+do have access to the following params:
 
 1. `req` - The request object ([reference](http://expressjs.com/de/api.html#req))
 2. `res` - The response object ([reference](http://expressjs.com/de/api.html#res))
@@ -136,7 +167,7 @@ See `client-websocket.html` for an example of a client using the WebSocket API.
 An example of these params can be found within the example app:
 
 ```typescript
-@Route("/broadcast", HttpMethod.GET)
+@Get("/broadcast")
 broadcast(req, res, next, io) {
     io.emit('news', {message: req.query.message, time: +(new Date())});
     return new JsonResponse({success: 1});
@@ -149,37 +180,219 @@ Sending a HTTP GET to `/broadcast?message=foobar` emits the message `foobar` to 
 
 For convenience Hans provides several `Response` objects:
 
-- `JsonResponse`: for JSON formatted responses
-- `XmlFromJsonResponse`: for XML formatted responses which originates from JSON
-- `Response`: a simple text response
+##### - `JsonResponse`
+
+JSON formatted response.
+
+```typescript
+return new JsonResponse({
+  message: 'foo'
+});
+
+// Outputs:
+// {
+//   message: 'foo'
+// }
+```
+
+##### - `XmlFromJsonResponse`
+
+XML formatted response based on JSON.
+
+```typescript
+return new XmlFromJsonResponse({
+  message: 'foo'
+});
+
+// Outputs:
+// <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+// <message>foo</message>
+```
+
+##### - `Response`
+
+Basic text response. Additionally parent to all response objects.
+
+```typescript
+return new Response('Hello there');
+
+// Outputs:
+// Hello there
+```
+
+##### - `FileResponse`
+
+Response from file.
+
+```typescript
+return new FileResponse('filename.ext');
+
+// Outputs the given file
+```
+
+> Files are served from your public directory which must be specified when bootstraping Hans:
+
+```typescript
+(new Hans(apps)).bootstrap({ publicDirectory: 'public' })
+```
+
+##### - `TemplateResponse`
+
+Response from placeholders. Content can be either a `string` or a `json` file (via `require`).
+
+```typescript
+return new TemplateResponse('hello %name%', { name: 'John' });
+
+// Outputs:
+// Hello John
+```
+
+##### Response settings
 
 All `Response` objects do allow setting the status code and/or headers via the constructor:
 
 ```typescript
-export class Response {
-    constructor(protected content: any = '', protected statusCode: number = 200, protected headers = []) {
-    }
-    
-    // ...
+return new JsonResponse({ error: 'nope' }, 400);
+```
+
+### Middleware
+
+Hans allows the usage of *middleware*, which is executed before an API (or an entire app) is called. An example 
+would be pseudo-authentication where the API would require proper authorizations headers:
+
+```typescript
+export function IsAuthenticated(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.headers.authorization) {
+    return res.status(403).json({error: 'You are not logged in!'});
+  }
+  next();
 }
+```
+
+This middleware can be applied to a method by:
+
+```typescript
+@Get('/authenticated')
+@Middleware([IsAuthenticated])
+authenticated() {
+  return new JsonResponse({
+    message: 'Hello there'
+  });
+}
+```
+
+Or to the entire application by passing it to the `@App` options:
+
+```typescript
+@App({
+  name: 'example',
+  port: 4999,
+  middleware: [IsAuthenticated]
+})
+```
+
+Trying to access your application will now most likely return an error due to not having proper headers set. If accessed
+via
+
+```bash
+curl -H "Authorization: Token abcd" http://localhost:4999/authenticated 
+``` 
+
+the API will return a friendly _"Hello there"_.
+
+Since middlewares are passed as an array it's possible to attach as many middleware per app or method as you'd like to. 
+Execution order is based on the order in the array.
+
+> **Important:** Middleware does ___not___ evaluate `Response` objects, meaning it's __your__ responsibility to take care 
+of sending a response. This can either be done by calling either `return res.send(your response)` or `next()`. Sending a 
+response yourself will prevent further actions while `next` simply continues the request. Neither calling 
+`res.send` nor `next` will result in a stuck request!
+
+### State
+
+Hans does implement a _very_ simple basic state (which is basically just a `Map`). There's two different states 
+which can be useful for you:
+
+#### Application / local state
+
+The application or local state can simply be implemented with class properties:
+
+```typescript
+export class Example {
+  private localState: State = new State();
+  
+  @Get('/state')
+  stateExample() {
+    let counter = this.localState.get('counter', 0);
+
+    this.localState.set('counter', counter + 1);
+
+    return new JsonResponse({
+      localState: this.localState.get('counter'),
+    });
+  }
+}
+```
+
+This state will persevere throughout all requests as long as Hans is not restarted .
+
+#### Hans-wide state
+
+Additionally to the local state Hans implements its own state which is available across _all_ registered applications. 
+This state is automatically injected into every applications constructor first argument:
+
+```typescript
+export class Example {
+  constructor(private globalState: State) {
+  }
+    
+  @Get('/state')
+  stateExample() {
+    let globalCounter = this.globalState.get('counter', 0);
+    
+    this.globalState.set('counter', globalCounter + 1);
+
+    return new JsonResponse({
+      globalState: this.globalState.get('counter')
+    });
+  }
+}
+```
+
+This state will persevere throughout all requests as long as Hans is not restarted and is shared across all applications.
+
+### Faker and Utility
+
+Hans integrates [Faker](https://github.com/marak/Faker.js/) by default, providing useful methods for generating fake
+data.
+
+Additionally there's a custom utility helper for biased random elements based on a given probability:
+
+```typescript
+const elements = [{
+  element: 'foo',
+  probability: 0.2
+}, {
+  element: 'bar',
+  probability: 0.7
+}, {
+  element: 'lorem',
+  probability: 0.1
+}];
+
+const e = Helper.getRandomElementByProbability(elements);
+// 70% chance for 'bar', 20% chance for 'foo', 10% chance for 'lorem'
 ```
 
 ## Troubleshooting 
 
 ### Responses take forever
 
-Most likely you've forgotten to wrap your response within a `Response` object. In case you're doing this on purpose you 
-are going to need to use `res` to send the response (see [here](http://expressjs.com/de/api.html#res)).
+For API methods: most likely you've forgotten to wrap your response in a `Response` object. To prevent stuck requests 
 
-If you don't want your responses to be returned at all, e.g. just calling a `console.log` statement without sending any 
-response:
+- return a `Response` object
+- call `res.send` by yourself
+- call `next()` by yourself
 
-```typescript
-@Route("/test", HttpMethod.GET)
-broadcast(req, res, next) {
-    console.log("Hello there");
-    next(); // the important thing here!
-}
-```
-
-The `next()` function call prevents the server to be stuck within this route forever.
+The same also applies for middleware __but__ keep in mind that middleware does not support `Response` objects, which means 
+returning a `Response` object would not work and you'd call `res.send` or `next` by yourself.
