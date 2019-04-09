@@ -9,5 +9,8 @@
     "object-literal-sort-keys": false,
     "array-type": false,
     "interface-name": false
+  },
+  "linterOptions": {
+    "exclude": ["example/**/*.ts"]
   }
 }
