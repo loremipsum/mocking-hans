@@ -2,11 +2,13 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## [0.3.0] - 2019-04-05
+## [0.3.0] - 2019-04-09
 ### Add
 - Add `TemplateResponse`
 - Add `FileResponse`
+- Add `TemplateResponse`
 - Add local and global state capabilities
+- Add middleware
 - Add random generator for weighted elements
 - Add faker library and proper examples
 - Add simplified import paths
