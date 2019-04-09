@@ -1,7 +1,7 @@
 {
   "name": "@loremipsum/mocking-hans",
   "author": "Kevin Hirczy",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "You don't mock the Hans, he's mocking you.",
   "scripts": {
     "example": "ts-node -r tsconfig-paths/register example/index.ts",
