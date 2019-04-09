@@ -1,4 +1,4 @@
-import {Get, App, Socket} from '@loremipsum/mocking-hans/decorators';
+import {Get, App, Socket, Middleware} from '@loremipsum/mocking-hans/decorators';
 import {
   Response,
   XmlFromJsonResponse,
@@ -7,10 +7,13 @@ import {
   TemplateResponse
 } from '@loremipsum/mocking-hans/response';
 import {State} from '@loremipsum/mocking-hans/utility';
+import {IsAuthenticated} from '../middleware/IsAuthenticated';
+import {LogRequestBody} from '../middleware/LogRequestBody';
 
 @App({
   name: 'example',
-  port: 4999
+  port: 4999,
+  middleware: [LogRequestBody]
 })
 export class Example {
   private localState: State = new State();
@@ -34,6 +37,14 @@ export class Example {
     return new JsonResponse({
       foo: 'bar'
     }, 400);
+  }
+
+  @Get('/authenticated')
+  @Middleware([IsAuthenticated])
+  authenticated() {
+    return new JsonResponse({
+      message: 'Hello there'
+    });
   }
 
   /**

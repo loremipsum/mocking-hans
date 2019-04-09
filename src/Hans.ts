@@ -91,10 +91,24 @@ export class Hans {
   }
 
   private registerRoutes(app, expressApp, io) {
-    const routes   = Reflect.getMetadata(Metadata.Routes, app) as Array<RouteDefinition>;
-    const instance = this.getAppInstance(app);
+    const routes     = Reflect.getMetadata(Metadata.Routes, app) as Array<RouteDefinition>;
+    const middleware = Reflect.getMetadata(Metadata.Middleware, app) as
+      Map<string, (req: express.Request, res: express.Response, next: express.NextFunction) => void>;
+    const instance   = this.getAppInstance(app);
+
+    if (Reflect.hasMetadata(Metadata.AppMiddleware, app)) {
+      const appMiddleware = Reflect.getMetadata(Metadata.AppMiddleware, app);
+      appMiddleware.forEach(callback => expressApp.use(callback));
+    }
 
     routes.forEach(route => {
+      if (middleware instanceof Map) {
+        const callbacks = middleware.get(route.methodName);
+        if (Array.isArray(callbacks)) {
+          callbacks.forEach(callback => expressApp.use(route.path, callback));
+        }
+      }
+
       expressApp[route.requestMethod](route.path, (req, res, next) => {
         const cb = instance[route.methodName](req, res, next, io);
 
