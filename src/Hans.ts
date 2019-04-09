@@ -11,6 +11,10 @@ import {FileResponse} from './Response/FileResponse';
 import * as path from 'path';
 import {State} from './Utility/State';
 
+interface HansOptions {
+  publicDirectory: string;
+}
+
 // Let's be honest here: I've always wanted to name a class "Hans".
 export class Hans {
   private appInstances: Map<string, object> = new Map<string, object>();
@@ -23,10 +27,10 @@ export class Hans {
   constructor(protected apps: Array<{ new(...args: any[]) }>) {
   }
 
-  public async bootstrap() {
+  public async bootstrap(options: HansOptions) {
     this.apps.forEach((app) => {
       const expressApp: express.Application = express();
-      expressApp.use(express.static('public'));
+      expressApp.use(express.static(options.publicDirectory));
       expressApp.use(bodyParser.json());
 
       const port = Reflect.getMetadata(Metadata.Port, app);
