@@ -13,7 +13,80 @@
 
 ## Installation
 
-**TODO**: Write this.
+1. Install Hans via npm/yarn `npm i @loremipsum/hans` / `yarn add @loremipsum/hans`
+2. Create an `index.ts` file where you bootstrap Hans:
+
+```typescript
+import {Hans} from '@loremipsum/mocking-hans';
+
+(async () => {
+  await (new Hans([])).bootstrap({publicDirectory: 'public'});
+})();
+```
+
+3. Create your APIs (recommended in an `apps/` directory):
+
+```typescript
+// apps/Example.ts
+
+import {Get, App, Response} from '@loremipsum/mocking-hans';
+
+@App({
+  name: 'example',
+  port: 4999,
+})
+export class Example {
+  /**
+   * A simple text response
+   */
+  @Get('/')
+  index() {
+    return new Response('Hello there!');
+  }
+}
+```
+
+4. Register your API to Hans:
+
+```typescript
+import {Example} from './apps/Example';
+
+await (new Hans([Example])).bootstrap({publicDirectory: 'public'});
+```
+
+5. It's recommended to install the [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) package which automatically 
+reloads Hans on changes. Install the package and extend your `scripts` in your `package.json` by:
+
+```json
+"scripts": {
+  "start": "ts-node-dev index.ts"
+},
+```
+
+6. Start Hans with `npm start`!
+
+### In-application
+
+Due to its packaged nature it's possible to ship Hans directly within the application (and its corresponding repository) 
+consuming the API. This could additionally be useful for running functional testing within a CI environment.
+
+To make use of this simply follow the instructions above within the repository of your application, but put all
+Hans-related things in a separate directory _and_ install the Hans with the `--save-dev` (for npm) / `--dev` (for yarn) 
+flag. The additional flags prevents Hans from being shipped in production.
+
+In case of an Angular application consuming the Twitter API your structure might look like this:
+
+```
+src/
+  // your angular application 
+api/
+  apps/
+    Twitter.ts    <- Mocked Twitter API
+  index.ts        <- Hans!
+.gitignore
+README.md
+package.json
+```
 
 ## Usage
 
