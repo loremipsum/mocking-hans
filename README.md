@@ -69,6 +69,7 @@ package and extend your `scripts` in your `package.json` by:
 ```json
 {
   "compilerOptions": {
+    "target": "es6",
     "moduleResolution": "node",
     "types": [
       "node",
