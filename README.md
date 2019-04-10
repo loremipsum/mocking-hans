@@ -69,14 +69,7 @@ package and extend your `scripts` in your `package.json` by:
 ```json
 {
   "compilerOptions": {
-    "target": "es6",
-    "lib": [
-      "es2015"
-    ],
-    "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": true,
-    "inlineSources": true,
     "types": [
       "node",
       "ws"
