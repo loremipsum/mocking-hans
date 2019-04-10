@@ -55,7 +55,8 @@ await (new Hans([Example])).bootstrap({publicDirectory: 'public'});
 ```
 
 5. It's recommended to install the [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) package which automatically 
-reloads Hans on changes. Install the package and extend your `scripts` in your `package.json` by:
+reloads Hans on changes and makes it possible to start Hans without previously need to compile TypeScript. Install the 
+package and extend your `scripts` in your `package.json` by:
 
 ```json
 "scripts": {
@@ -63,7 +64,29 @@ reloads Hans on changes. Install the package and extend your `scripts` in your `
 },
 ```
 
-6. Start Hans with `npm start`!
+6. Create a `tsconfig.json`
+
+```json
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "es2015"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "inlineSources": true,
+    "types": [
+      "node",
+      "ws"
+    ],
+    "experimentalDecorators": true
+  }
+}
+```
+
+7. Start Hans with `npm start`!
 
 ### In-application
 
@@ -74,6 +97,9 @@ To make use of this simply follow the instructions above within the repository o
 Hans-related things in a separate directory _and_ install the Hans with the `--save-dev` (for npm) / `--dev` (for yarn) 
 flag. The additional flags prevents Hans from being shipped in production.
 
+> Keep in mind that running Hans this way requires you to pass the `--project api/tsconfig.json` flag when starting Hans
+> to ensure the proper tsconfig to be used.
+
 In case of an Angular application consuming the Twitter API your structure might look like this:
 
 ```
@@ -83,6 +109,7 @@ api/
   apps/
     Twitter.ts    <- Mocked Twitter API
   index.ts        <- Hans!
+  tsconfig.json   <- tsconfig for Hans
 .gitignore
 README.md
 package.json
