@@ -1,15 +1,14 @@
 import 'reflect-metadata';
-import {Metadata, RouteDefinition, SocketDefinition} from '@loremipsum/mocking-hans/model';
-import {JsonResponse, Response, XmlFromJsonResponse} from '@loremipsum/mocking-hans/response';
+import {Metadata, RouteDefinition, SocketDefinition} from './Model';
+import {JsonResponse, Response, XmlFromJsonResponse, FileResponse} from './Response';
+import {State} from './Utility';
 import chalk from 'chalk';
 import WebSocket = require('ws');
 import * as url from 'url';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
-import {FileResponse} from './Response/FileResponse';
 import * as path from 'path';
-import {State} from './Utility/State';
 
 interface HansOptions {
   publicDirectory: string;
@@ -28,6 +27,11 @@ export class Hans {
   }
 
   public async bootstrap(options: HansOptions) {
+    if (this.apps.length === 0) {
+      // tslint:disable-next-line
+      console.error("Nothing to mock. Farewell, friend.");
+    }
+
     this.apps.forEach((app) => {
       const expressApp: express.Application = express();
       expressApp.use(express.static(options.publicDirectory));

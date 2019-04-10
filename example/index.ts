@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {Hans} from '@loremipsum/mocking-hans';
+import {Hans} from '../src';
 import {Example} from './apps/Example';
 import {Twitter} from './apps/Twitter';
 import {WS} from './apps/WS';

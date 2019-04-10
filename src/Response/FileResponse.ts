@@ -1,4 +1,4 @@
-import {Response} from '@loremipsum/mocking-hans/response';
+import {Response} from './Response';
 
 export class FileResponse extends Response {
   constructor(protected filename: string, statusCode: number = 200, headers = []) {

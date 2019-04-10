@@ -1,5 +1,5 @@
-import {App, Get} from '@loremipsum/mocking-hans/decorators';
-import {JsonResponse} from '@loremipsum/mocking-hans/response';
+import {App, Get} from '../../src/Decorator';
+import {JsonResponse} from '../../src/Response';
 
 @App({
   name: 'twitter',

@@ -1,12 +1,12 @@
-import {Get, App, Socket, Middleware} from '@loremipsum/mocking-hans/decorators';
+import {Get, App, Socket, Middleware} from '../../src/Decorator';
 import {
   Response,
   XmlFromJsonResponse,
   JsonResponse,
   FileResponse,
   TemplateResponse
-} from '@loremipsum/mocking-hans/response';
-import {State} from '@loremipsum/mocking-hans/utility';
+} from '../../src/Response';
+import {State} from '../../src/Utility';
 import {IsAuthenticated} from '../middleware/IsAuthenticated';
 import {LogRequestBody} from '../middleware/LogRequestBody';
 

@@ -1,4 +1,4 @@
-import {Response} from '@loremipsum/mocking-hans/response';
+import {Response} from './Response';
 
 export class JsonResponse extends Response {
   constructor(protected content = {}, statusCode: number = 200, headers = []) {

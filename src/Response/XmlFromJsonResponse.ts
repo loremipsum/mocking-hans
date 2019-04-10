@@ -1,4 +1,4 @@
-import {Response} from '@loremipsum/mocking-hans/response';
+import {Response} from './Response';
 import * as jsonxml from 'jsontoxml';
 
 export class XmlFromJsonResponse extends Response {

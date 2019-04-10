@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import {Request, Response, NextFunction} from 'express';
-import {Metadata} from '@loremipsum/mocking-hans/model';
+import {Metadata} from '../Model';
 
 type MiddlewareCallback = (req: Request, res: Response, next: NextFunction) => void;
 

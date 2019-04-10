@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {Metadata, SocketDefinition} from '@loremipsum/mocking-hans/model';
+import {Metadata, SocketDefinition} from '../Model';
 
 export const Socket = (event: string, namespace: string = '/'): MethodDecorator => {
   return (target: any, propertyKey: string): void => {

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {Metadata} from '@loremipsum/mocking-hans/model';
+import {Metadata} from '../Model';
 import {Request, Response, NextFunction} from 'express';
 
 export const App = (options: {

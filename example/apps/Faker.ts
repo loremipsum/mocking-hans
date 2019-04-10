@@ -1,7 +1,7 @@
-import {Get, App} from '@loremipsum/mocking-hans/decorators';
-import {JsonResponse} from '@loremipsum/mocking-hans';
+import {Get, App} from '../../src/Decorator';
+import {JsonResponse} from '../../src/Response';
+import {Helper} from '../../src/Utility';
 import * as faker from 'faker';
-import {Helper} from '@loremipsum/mocking-hans/utility';
 
 @App({
   name: 'faker',

@@ -1,5 +1,5 @@
 import WebSocket = require('ws');
-import {App, Websocket} from '@loremipsum/mocking-hans/decorators';
+import {App, Websocket} from '../../src/Decorator';
 
 @App({
   name: 'WS',
