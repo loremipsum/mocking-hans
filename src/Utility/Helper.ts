@@ -13,4 +13,8 @@ export class Helper {
 
     return elements[index];
   }
+
+  public static hasPropability(propability: number) {
+    return Math.random() <= propability;
+  }
 }

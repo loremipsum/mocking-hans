@@ -6,7 +6,7 @@ import {
   FileResponse,
   TemplateResponse
 } from '../../src/Response';
-import {State} from '../../src/Utility';
+import {Helper, State} from '../../src/Utility';
 import {IsAuthenticated} from '../middleware/IsAuthenticated';
 import {LogRequestBody} from '../middleware/LogRequestBody';
 
@@ -34,9 +34,15 @@ export class Example {
    */
   @Get('/json')
   json() {
+    // Return 400 with "Bad request" message with a propability of 30%
+    if (Helper.hasPropability(0.3)) {
+      return new JsonResponse({
+        message: 'Bad request'
+      }, 400);
+    }
     return new JsonResponse({
       foo: 'bar'
-    }, 400);
+    });
   }
 
   @Get('/authenticated')
@@ -97,7 +103,7 @@ export class Example {
         parent2: {
           hi: 'is a nice thing to say',
           node: 'i am another not special child node',
-          date: function () {
+          date: function() {
             return (new Date()) + '';
           }
         }
