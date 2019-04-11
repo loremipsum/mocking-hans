@@ -14,17 +14,8 @@
 ## Installation
 
 1. Install Hans via npm/yarn `npm i @loremipsum/hans` / `yarn add @loremipsum/hans`
-2. Create an `index.ts` file where you bootstrap Hans:
 
-```typescript
-import {Hans} from '@loremipsum/mocking-hans';
-
-(async () => {
-  await (new Hans([])).bootstrap({publicDirectory: 'public'});
-})();
-```
-
-3. Create your APIs (recommended in an `apps/` directory):
+2. Create your APIs (recommended in an `apps/` directory):
 
 ```typescript
 // apps/Example.ts
@@ -46,15 +37,19 @@ export class Example {
 }
 ```
 
-4. Register your API to Hans:
+3. Create a `index.ts` file where you bootstrap Hans and register your APIs:
 
 ```typescript
+// index.ts
+
 import {Example} from './apps/Example';
 
-await (new Hans([Example])).bootstrap({publicDirectory: 'public'});
+(new Hans([Example])).bootstrap({ publicDirectory: 'public' }).then(() => {
+  console.log('\nAre you ready to ... MOCK?\n');
+});
 ```
 
-5. It's recommended to install the [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) package which automatically 
+4. It's recommended to install the [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) package which automatically 
 reloads Hans on changes and makes it possible to start Hans without previously need to compile TypeScript. Install the 
 package and extend your `scripts` in your `package.json` by:
 
@@ -64,7 +59,7 @@ package and extend your `scripts` in your `package.json` by:
 },
 ```
 
-6. Create a `tsconfig.json`
+5. Create a `tsconfig.json`
 
 ```json
 {
@@ -80,7 +75,7 @@ package and extend your `scripts` in your `package.json` by:
 }
 ```
 
-7. Start Hans with `npm start`!
+6. Start Hans with `npm start`!
 
 ### In-application
 
@@ -125,23 +120,23 @@ Apps **must** be decorated with the `@App` decorator:
 
 ```typescript
 @App({
-    name: 'twitter',
-    port: 61000
+  name: 'twitter',
+  port: 61000
 })
 export class Twitter {
   @Get("/1.1/search/tweets.json")
   getTweets() {
-      return new JsonResponse({
-          "statuses": [
-              {
-                  "created_at": "Sun Feb 25 18:11:01 +0000 2018",
-                  "id": 967824267948773377,
-                  "id_str": "967824267948773377",
-                  "text": "From pilot to astronaut, Robert H. Lawrence was the first African-American to be selected as an astronaut by any na… https://t.co/FjPEWnh804",
-                  "truncated": true
-              }
-          ]
-      })
+    return new JsonResponse({
+      "statuses": [
+        {
+          "created_at": "Sun Feb 25 18:11:01 +0000 2018",
+          "id": 967824267948773377,
+          "id_str": "967824267948773377",
+          "text": "From pilot to astronaut, Robert H. Lawrence was the first African-American to be selected as an astronaut by any na… https://t.co/FjPEWnh804",
+          "truncated": true
+        }
+      ]
+    })
   }
 }
 ```
@@ -167,12 +162,12 @@ Starting Hans will now result in:
 Even though your app is loaded, it doesn't expose any interfaces yet. Interfaces are 
 represented as single methods and need to be decorated with a proper decorator which represents the request 
 method (`@Get`, `@Post`, `@Put` or `@Delete`). In 
-case of our Twitter app you may are going for an implementation like:
+case of our Twitter app you may be going for an implementation like:
 
 ```typescript
 @App({
-    name: 'twitter',
-    port: 61000
+  name: 'twitter',
+  port: 61000
 })
 export class Twitter {
   @Get("/1.1/search/tweets.json")
@@ -204,7 +199,7 @@ as HTTP routes, but with the `@Socket` decorator:
 ```typescript
 @Socket('connection')
 onConnect() {
-    console.log(`Someone connected to Example.`);
+  console.log(`Someone connected to Example.`);
 }
 ```
 
@@ -218,11 +213,11 @@ Using sockets on your client requires the `socket.io-client` library to be insta
 ```html
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
 <script>
-    let socket = io.connect('http://localhost:61000');
+  let socket = io.connect('http://localhost:61000');
 
-    socket.on('news', data => {
-        console.log(data);
-    });
+  socket.on('news', data => {
+    console.log(data);
+  });
 </script>
 ```
 
@@ -235,7 +230,7 @@ WebSocket interfaces are implemented much like Sockets, but with the `@Websocket
 ```typescript
 @Websocket('connection')
 onConnect() {
-    console.log(`Someone connected to / via Websocket.`);
+  console.log(`Someone connected to / via Websocket.`);
 }
 ```
 
@@ -263,8 +258,8 @@ An example of these params can be found within the example app:
 ```typescript
 @Get("/broadcast")
 broadcast(req, res, next, io) {
-    io.emit('news', {message: req.query.message, time: +(new Date())});
-    return new JsonResponse({success: 1});
+  io.emit('news', {message: req.query.message, time: +(new Date())});
+  return new JsonResponse({success: 1});
 }
 ```
 
@@ -394,7 +389,7 @@ curl -H "Authorization: Token abcd" http://localhost:4999/authenticated
 
 the API will return a friendly _"Hello there"_.
 
-Since middlewares are passed as an array it's possible to attach as many middleware per app or method as you'd like to. 
+Since middlewares are passed as an array it's possible to attach as many middlewares per app or method as you'd like to. 
 Execution order is based on the order in the array.
 
 > **Important:** Middleware does ___not___ evaluate `Response` objects, meaning it's __your__ responsibility to take care 
