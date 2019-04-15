@@ -1,28 +1,38 @@
 import 'reflect-metadata';
-import {Metadata} from '../Model';
-import {Request, Response, NextFunction} from 'express';
+import {MetadataKey} from '../Model';
+import {NextFunction, Request, Response} from 'express';
+import {Metadata} from '../Utility';
+import {Container} from '../Utility/Container';
 
 export const App = (options: {
   name: string,
   port: number,
   middleware?: Array<(req: Request, res: Response, next: NextFunction) => void>,
+  configure?: (container: Container) => void
 }): ClassDecorator => {
   return (target: any): void => {
-    Reflect.defineMetadata(Metadata.Name, options.name, target);
-    Reflect.defineMetadata(Metadata.Port, options.port, target);
-
-    if (Array.isArray(options.middleware)) {
-      Reflect.defineMetadata(Metadata.AppMiddleware, options.middleware, target);
+    if (!options.configure) {
+      options.configure = () => void 0;
     }
+
+    Metadata.set(target, MetadataKey.Configuration, options.configure);
+    Metadata.set(target, MetadataKey.Name, options.name);
+    Metadata.set(target, MetadataKey.Port, options.port);
+
+    if (!Array.isArray(options.middleware)) {
+      options.middleware = [];
+    }
+
+    Metadata.set(target, MetadataKey.AppMiddleware, options.middleware);
 
     // In case an app doesn't make use of these metadata keys set the default values for them
     [
-      Metadata.NativeSocketRoutes,
-      Metadata.SocketIORoutes,
-      Metadata.Routes,
+      MetadataKey.NativeSocketRoutes,
+      MetadataKey.SocketIORoutes,
+      MetadataKey.Routes,
     ].forEach(metadata => {
-      if (! Reflect.hasMetadata(metadata, target)) {
-        Reflect.defineMetadata(metadata, [], target);
+      if (! Metadata.has(target, metadata)) {
+        Metadata.set(target, metadata, []);
       }
     });
   };

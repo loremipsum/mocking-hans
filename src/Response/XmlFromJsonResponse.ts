@@ -4,6 +4,8 @@ import * as jsonxml from 'jsontoxml';
 export class XmlFromJsonResponse extends Response {
   constructor(protected content = {}) {
     super(content);
+
+    this.headers.push('Content-Type: text/xml');
   }
 
   public getContent() {

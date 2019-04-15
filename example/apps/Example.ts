@@ -10,6 +10,11 @@ import {Helper, State} from '../../src/Utility';
 import {IsAuthenticated} from '../middleware/IsAuthenticated';
 import {LogRequestBody} from '../middleware/LogRequestBody';
 
+const socketMiddleware = (p, next) => {
+  console.log(p);
+  next();
+};
+
 @App({
   name: 'example',
   port: 4999,

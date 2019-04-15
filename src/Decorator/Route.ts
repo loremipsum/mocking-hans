@@ -1,16 +1,19 @@
 import 'reflect-metadata';
-import {HttpMethod, RouteDefinition, Metadata} from '../Model';
+import {HttpMethod, MetadataKey, RouteDefinition} from '../Model';
+import {Metadata, Type} from '../Utility';
+import {AdapterInterface, ExpressAdapter} from '../Adapter';
 
 const addRoute = (path: string, requestMethod: HttpMethod, target: object, methodName: string) => {
-  if (!Reflect.getMetadata(Metadata.Routes, target.constructor)) {
-    Reflect.defineMetadata(Metadata.Routes, [], target.constructor);
-  }
-
   if (!path.startsWith('/')) {
     path = `/${path}`;
   }
 
-  const routes = Reflect.getMetadata(Metadata.Routes, target.constructor) as Array<RouteDefinition>;
+  const adapter = Metadata.get<Array<Type<AdapterInterface>>>(target.constructor, MetadataKey.Adapter, []);
+  const routes  = Metadata.get<Array<RouteDefinition>>(target.constructor, MetadataKey.Routes, []);
+
+  if (!adapter.find(e => e === ExpressAdapter)) {
+    adapter.push(ExpressAdapter);
+  }
 
   routes.push({
     path,
@@ -18,7 +21,8 @@ const addRoute = (path: string, requestMethod: HttpMethod, target: object, metho
     methodName,
   });
 
-  Reflect.defineMetadata(Metadata.Routes, routes, target.constructor);
+  Metadata.set(target.constructor, MetadataKey.Adapter, adapter);
+  Metadata.set(target.constructor, MetadataKey.Routes, routes);
 };
 
 export const Get = (path: string):

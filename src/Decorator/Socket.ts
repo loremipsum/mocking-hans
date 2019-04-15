@@ -1,18 +1,24 @@
 import 'reflect-metadata';
-import {Metadata, SocketDefinition} from '../Model';
+import {MetadataKey, SocketDefinition} from '../Model';
+import {Metadata, Type} from '../Utility';
+import {AdapterInterface, SocketIOAdapter} from '../Adapter';
 
 export const Socket = (event: string, namespace: string = '/'): MethodDecorator => {
   return (target: any, propertyKey: string): void => {
-    if (!Reflect.getMetadata(Metadata.SocketIORoutes, target.constructor)) {
-      Reflect.defineMetadata(Metadata.SocketIORoutes, [], target.constructor);
-    }
+    const adapter = Metadata.get<Array<Type<AdapterInterface>>>(target.constructor, MetadataKey.Adapter, []);
+    const sockets = Metadata.get<Array<SocketDefinition>>(target.constructor, MetadataKey.SocketIORoutes, []);
 
-    const sockets = Reflect.getMetadata(Metadata.SocketIORoutes, target.constructor) as Array<SocketDefinition>;
+    if (!adapter.find(e => e === SocketIOAdapter)) {
+      adapter.push(SocketIOAdapter);
+    }
 
     sockets.push({
       event,
       namespace,
       methodName: propertyKey,
     });
+
+    Metadata.set(target.constructor, MetadataKey.Adapter, adapter);
+    Metadata.set(target.constructor, MetadataKey.SocketIORoutes, sockets);
   };
 };
