@@ -20,7 +20,7 @@ export class Hans {
   public async bootstrap() {
     if (this.apps.length === 0) {
       // tslint:disable-next-line
-      console.error('Nothing to mock. Farewell, friend.');
+      console.error(chalk.bold.yellow('Nothing to mock. Farewell, friend.'));
     }
 
     this.apps.forEach((app) => {
