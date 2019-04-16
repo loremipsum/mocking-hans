@@ -4,9 +4,6 @@ import {Hans} from './Hans';
 import chalk from 'chalk';
 import * as fs from 'fs';
 
-// tslint:disable-next-line
-require('ts-node').register();
-
 const args         = process.argv;
 const appDirectory = args[2];
 const apps = [];
