@@ -24,6 +24,8 @@ export class SocketIOAdapter implements AdapterInterface {
 
     this.io = require('socket.io')(this.container.get('http_server'));
 
+    this.container.set('io', this.io);
+
     this.registerSockets(app);
   }
 
