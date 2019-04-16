@@ -2,6 +2,16 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [0.4.0] - 2019-04-16
+### Add
+- Add `Container`
+- Add application configuration to `@App` decorator
+- Add bin utility
+
+### Change
+- Modularized Hans (with adapters!)
+- Refactor getting/setting metadata (`Metadata` helper class)
+
 ## [0.3.0] - 2019-04-09
 ### Add
 - Add `TemplateResponse`
