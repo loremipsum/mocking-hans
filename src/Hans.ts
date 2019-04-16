@@ -34,7 +34,7 @@ export class Hans {
 
       if (!Array.isArray(adapters) || adapters.length === 0) {
         // tslint:disable-next-line
-        console.error(`${chalk.red.bold(`\t ERROR: No adapters found for ${name}`)}`);
+        console.error(chalk.red.bold(`\t ERROR: No adapters found for ${name}`));
         return;
       }
 

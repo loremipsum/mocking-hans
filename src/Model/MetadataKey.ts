@@ -8,4 +8,5 @@ export enum MetadataKey {
   AppMiddleware      = 'hans_app_middleware',
   Adapter            = 'hans_app_adapter',
   Configuration      = 'hans_app_configuration',
+  PublicDirectory    = 'hans_public_directory',
 }

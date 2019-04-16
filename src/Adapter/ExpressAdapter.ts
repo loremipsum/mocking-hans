@@ -2,12 +2,13 @@ import {AdapterInterface} from './AdapterInterface';
 import {Container} from '../Utility/Container';
 import {Metadata, Type} from '../Utility';
 import {MetadataKey, RouteDefinition} from '../Model';
-import {Response} from '../Response';
+import {FileResponse, Response} from '../Response';
 import chalk from 'chalk';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import {RequestHandler} from 'express-serve-static-core';
+import * as path from 'path';
 
 export class ExpressAdapter implements AdapterInterface {
   protected express: express.Application;
@@ -22,6 +23,7 @@ export class ExpressAdapter implements AdapterInterface {
     this.container = container;
     this.container.set('express_app', this.express);
 
+    this.express.use(express.static(Metadata.get<string>(app, MetadataKey.PublicDirectory)));
     this.express.use(bodyParser.json());
     this.express.use('/robots.txt', (req, res, next) => next());
     this.express.use('/favicon.ico', (req, res, next) => next());
@@ -57,18 +59,22 @@ export class ExpressAdapter implements AdapterInterface {
       this.express[route.requestMethod]
       (route.path, (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const cb = instance[route.methodName](req, res, next);
-        return this.handleResponse(res, cb);
+        return this.handleResponse(res, cb, Metadata.get<string>(app, MetadataKey.PublicDirectory));
       });
     });
   }
 
-  private handleResponse(res, cb) {
+  private handleResponse(res: express.Response, cb, publicDirectory?: string) {
     if (!(cb instanceof Response)) {
       return cb;
     }
 
     res.status(cb.getStatusCode());
     res.set(cb.getHeaders());
+
+    if (cb instanceof FileResponse) {
+      return res.sendFile(path.join(publicDirectory, cb.getFilename()));
+    }
 
     return res.send(cb.getContent());
   }

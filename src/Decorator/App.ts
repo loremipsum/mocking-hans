@@ -3,12 +3,14 @@ import {MetadataKey} from '../Model';
 import {NextFunction, Request, Response} from 'express';
 import {Metadata} from '../Utility';
 import {Container} from '../Utility/Container';
+import * as path from 'path';
 
 export const App = (options: {
   name: string,
   port: number,
   middleware?: Array<(req: Request, res: Response, next: NextFunction) => void>,
-  configure?: (container: Container) => void
+  publicDirectory?: string,
+  configure?: (container: Container) => void,
 }): ClassDecorator => {
   return (target: any): void => {
     if (!options.configure) {
@@ -24,6 +26,12 @@ export const App = (options: {
     }
 
     Metadata.set(target, MetadataKey.AppMiddleware, options.middleware);
+
+    if (!options.publicDirectory) {
+      options.publicDirectory = path.join(__dirname, '../../public/');
+    }
+
+    Metadata.set(target, MetadataKey.PublicDirectory, options.publicDirectory);
 
     // In case an app doesn't make use of these metadata keys set the default values for them
     [
