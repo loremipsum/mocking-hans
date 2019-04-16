@@ -37,26 +37,21 @@ export class Example {
 }
 ```
 
-3. Create a `index.ts` file where you bootstrap Hans and register your APIs:
-
-```typescript
-// index.ts
-
-import {Example} from './apps/Example';
-
-(new Hans([Example])).bootstrap({ publicDirectory: 'public' }).then(() => {
-  console.log('\nAre you ready to ... MOCK?\n');
-});
-```
-
-4. It's recommended to install the [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) package which automatically 
-reloads Hans on changes and makes it possible to start Hans without previously need to compile TypeScript. Install the 
-package and extend your `scripts` in your `package.json` by:
+3. Hans can be started with either `./node_modules/.bin/hans apps` or add to your `scripts` section in your `package.json`:
 
 ```json
 "scripts": {
-  "start": "ts-node-dev index.ts"
-},
+  "hans": "hans apps"
+}
+```
+
+> It's recommended to install the [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) package which automatically 
+  reloads Hans on changes. Install the package and extend your change your hans script to:
+
+```json
+"scripts": {
+  "start": "ts-node-dev ./node_modules/.bin/hans apps"
+}
 ```
 
 5. Create a `tsconfig.json`
@@ -75,30 +70,28 @@ package and extend your `scripts` in your `package.json` by:
 }
 ```
 
-6. Start Hans with `npm start`!
+6. **Done**!
 
-### In-application
+### Application coupling
 
 Due to its packaged nature it's possible to ship Hans directly within the application (and its corresponding repository) 
 consuming the API. This could additionally be useful for running functional testing within a CI environment.
 
-To make use of this simply follow the instructions above within the repository of your application, but put all
-Hans-related things in a separate directory _and_ install the Hans with the `--save-dev` (for npm) / `--dev` (for yarn) 
+To make use of this simply follow the instructions above within the repository of your application _and_ install 
+Hans with the `--save-dev` (for npm) / `--dev` (for yarn) 
 flag. The additional flags prevents Hans from being shipped in production.
 
-> Keep in mind that running Hans this way requires you to pass the `--project api/tsconfig.json` flag when starting Hans
-> to ensure the proper tsconfig to be used.
+> Keep in mind that running Hans this way requires you to pass the `--project <tsconfig path>.json` flag when starting 
+Hans to ensure the proper tsconfig to be used.
 
 In case of an Angular application consuming the Twitter API your structure might look like this:
 
 ```
 src/
   // your angular application 
-api/
-  apps/
-    Twitter.ts    <- Mocked Twitter API
-  index.ts        <- Hans!
-  tsconfig.json   <- tsconfig for Hans
+api-mock/
+  Twitter.ts    <- Mocked Twitter API
+  tsconfig.json <- tsconfig for Hans
 .gitignore
 README.md
 package.json
@@ -141,7 +134,8 @@ export class Twitter {
 }
 ```
 
-Additionally apps needs to be registered to Hans; registered apps are passed to Hans when instantiating the class, e.g.:
+When manually creating the Hans instance apps needs to be registered to Hans; registered apps are passed to Hans when 
+instantiating the class, e.g.:
 
 ```typescript
 (new Hans([Twitter])).bootstrap().then(() => {
@@ -156,6 +150,14 @@ Starting Hans will now result in:
 
     ✔ Started twitter on localhost:61000
 ```
+
+The `@App` options are:
+
+- `name` (string): Application name
+- `port` (string): Application port
+- `middleware` (Array<string>): Used middleware (**only works for http routes!**)
+- `publicDirectory` (string): Path to the public directory of this application
+- `configure`: Callback (`(container) => void`) for configuring the application
 
 #### Implementing interfaces
 
@@ -240,6 +242,28 @@ The `@Websocket` decorator accepts two parameters:
 2. The topic or path (by default `/`)
 
 See `client-websocket.html` for an example of a client using the WebSocket API.
+
+#### Configuration
+
+The `@App` decorator makes it possible to configure your app on its lowest level; think of using custom middleware for
+Express.
+
+```typescript
+@App({
+  name: 'example',
+  port: 4999,
+  configure: container => {
+    const express = container.get('express_app');
+    express.use(/** your middleware **/);
+  }
+})
+```
+
+The `Container` does keep track of all applications and adapters (e.g. Express, SocketIO, ...):
+
+- `Container.get('http_server')`: the used HTTP server for this application
+- `Container.get('express_app')'`: the express instance for this application
+- `Container.get('io')`: the io instance for this application
 
 ### API
 
