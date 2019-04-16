@@ -1,6 +1,6 @@
 import {AdapterInterface} from './AdapterInterface';
 import {Container} from '../Utility/Container';
-import {Metadata} from '../Utility';
+import {Metadata, Type} from '../Utility';
 import {MetadataKey, RouteDefinition} from '../Model';
 import {Response} from '../Response';
 import chalk from 'chalk';
@@ -18,11 +18,13 @@ export class ExpressAdapter implements AdapterInterface {
     this.express = express();
   }
 
-  public register(app: object, container: Container) {
+  public register(app: Type<object>, container: Container) {
     this.container = container;
     this.container.set('express_app', this.express);
 
     this.express.use(bodyParser.json());
+    this.express.use('/robots.txt', (req, res, next) => next());
+    this.express.use('/favicon.ico', (req, res, next) => next());
 
     this.applyLogger(app);
     this.registerRoutes(app);
@@ -40,7 +42,7 @@ export class ExpressAdapter implements AdapterInterface {
   private registerRoutes(app) {
     const appName    = Metadata.get<string>(app, MetadataKey.Name);
     const routes     = Metadata.get<Array<RouteDefinition>>(app, MetadataKey.Routes);
-    const middleware = Metadata.get<Map<string, RequestHandler>>(app, MetadataKey.Middleware);
+    const middleware = Metadata.get<Map<string, RequestHandler>>(app, MetadataKey.Middleware, new Map());
     const instance   = this.container.get(appName);
 
     const appMiddleware = Metadata.get<Array<RequestHandler>>(app, MetadataKey.AppMiddleware, []);
