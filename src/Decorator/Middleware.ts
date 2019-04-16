@@ -9,7 +9,7 @@ export const Middleware = (callback: Array<MiddlewareCallback>): MethodDecorator
     const middleware = Metadata.get<Map<string, Array<MiddlewareCallback>>>(
       target.constructor,
       MetadataKey.Middleware,
-      new Map<string, Array<MiddlewareCallback>>()
+      new Map<string, Array<MiddlewareCallback>>(),
     );
 
     middleware.set(propertyKey, callback);

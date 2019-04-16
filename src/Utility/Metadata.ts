@@ -3,7 +3,7 @@ import {MetadataKey} from '../Model';
 
 export class Metadata {
   public static get<T>(target: any, key: MetadataKey, fallback: any = null): T {
-    if(Reflect.hasMetadata(key, target)) {
+    if (Reflect.hasMetadata(key, target)) {
       return Reflect.getMetadata(key, target);
     }
 
