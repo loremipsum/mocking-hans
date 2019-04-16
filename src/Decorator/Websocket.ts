@@ -1,18 +1,24 @@
 import 'reflect-metadata';
 import {MetadataKey, SocketDefinition} from '../Model';
+import {AdapterInterface, WebsocketAdapter} from '../Adapter';
+import {Metadata, Type} from '../Utility';
 
 export const Websocket = (event: string, namespace: string = '/'): MethodDecorator => {
   return (target: any, propertyKey: string): void => {
-    if (!Reflect.getMetadata(MetadataKey.NativeSocketRoutes, target.constructor)) {
-      Reflect.defineMetadata(MetadataKey.NativeSocketRoutes, [], target.constructor);
-    }
+    const adapter = Metadata.get<Array<Type<AdapterInterface>>>(target.constructor, MetadataKey.Adapter, []);
+    const sockets = Metadata.get<Array<SocketDefinition>>(target.constructor, MetadataKey.NativeSocketRoutes, []);
 
-    const sockets = Reflect.getMetadata(MetadataKey.NativeSocketRoutes, target.constructor) as Array<SocketDefinition>;
+    if (!adapter.find(e => e === WebsocketAdapter)) {
+      adapter.push(WebsocketAdapter);
+    }
 
     sockets.push({
       event,
       namespace,
       methodName: propertyKey,
     });
+
+    Metadata.set(target.constructor, MetadataKey.NativeSocketRoutes, sockets);
+    Metadata.set(target.constructor, MetadataKey.Adapter, adapter);
   };
 };

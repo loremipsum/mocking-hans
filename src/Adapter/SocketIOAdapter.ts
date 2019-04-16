@@ -29,7 +29,7 @@ export class SocketIOAdapter implements AdapterInterface {
 
   private registerSockets(app: object) {
     const appName    = Metadata.get<string>(app, MetadataKey.Name);
-    const routes = Metadata.get<Array<SocketDefinition>>(app, MetadataKey.SocketIORoutes);
+    const routes     = Metadata.get<Array<SocketDefinition>>(app, MetadataKey.SocketIORoutes);
     const middleware = Metadata.get<Map<string, (socket) => void>>(app, MetadataKey.Middleware);
     const instance   = this.container.get(appName);
 
@@ -38,6 +38,7 @@ export class SocketIOAdapter implements AdapterInterface {
       s.on(socket.event, sock => {
         const callbacks = middleware.get(socket.methodName);
         if (Array.isArray(callbacks)) {
+          // tslint:disable-next-line
           console.error(chalk.red.bold('Error: Middleware is not supported for sockets yet.'));
         }
 

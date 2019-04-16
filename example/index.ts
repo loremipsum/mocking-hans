@@ -9,9 +9,9 @@ const chalk = require('chalk');
 
 const apps = [
   Example,
-  // Twitter,
-  // WS,
-  // Faker,
+  Twitter,
+  WS,
+  Faker,
 ];
 
 (new Hans(apps)).bootstrap().then(() => {
