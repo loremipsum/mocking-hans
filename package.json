@@ -18,6 +18,9 @@
   "files": [
     "dist/**/*"
   ],
+  "bin": {
+    "hans": "./dist/console.js"
+  },
   "private": true,
   "dependencies": {
     "@types/express": "^4.16.1",
