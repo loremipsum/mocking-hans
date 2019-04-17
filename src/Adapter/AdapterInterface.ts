@@ -1,4 +1,4 @@
-import {Container} from '../Utility/Container';
+import {Container} from '../Utility';
 
 export interface AdapterInterface {
   register(app: object, container: Container);

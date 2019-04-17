@@ -1,6 +1,5 @@
 import {AdapterInterface} from './';
-import {Container} from '../Utility/Container';
-import {Metadata} from "../Utility";
+import {Container, Metadata} from "../Utility";
 import {MetadataKey, GraphqlRouteDefinition} from "../Model";
 import {RequestHandler} from "express-serve-static-core";
 import {buildSchema} from 'graphql';

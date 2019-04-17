@@ -1,6 +1,5 @@
 import {AdapterInterface} from './AdapterInterface';
-import {Container} from '../Utility/Container';
-import {Metadata, Type} from '../Utility';
+import {Container, Metadata, Type} from '../Utility';
 import {MetadataKey, RouteDefinition} from '../Model';
 import {FileResponse, Response} from '../Response';
 import chalk from 'chalk';

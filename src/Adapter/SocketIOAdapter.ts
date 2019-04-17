@@ -1,7 +1,6 @@
 import {AdapterInterface} from './AdapterInterface';
-import {Container} from '../Utility/Container';
 import {MetadataKey, SocketDefinition} from '../Model';
-import {Metadata} from '../Utility';
+import {Container, Metadata} from '../Utility';
 import chalk from 'chalk';
 
 export class SocketIOAdapter implements AdapterInterface {

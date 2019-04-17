@@ -1,9 +1,8 @@
 import 'reflect-metadata';
 import {MetadataKey} from './Model';
-import {Metadata, State, Type} from './Utility';
+import {Container, Metadata, State, Type} from './Utility';
 import chalk from 'chalk';
 import {AdapterInterface} from './Adapter';
-import {Container} from './Utility/Container';
 
 // Let's be honest here: I've always wanted to name a class "Hans".
 export class Hans {

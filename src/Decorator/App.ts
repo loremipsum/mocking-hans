@@ -1,8 +1,7 @@
 import 'reflect-metadata';
 import {MetadataKey} from '../Model';
 import {NextFunction, Request, Response} from 'express';
-import {Metadata} from '../Utility';
-import {Container} from '../Utility/Container';
+import {Container, Metadata} from '../Utility';
 import * as path from 'path';
 
 export const App = (options: {
