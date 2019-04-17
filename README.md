@@ -54,7 +54,7 @@ export class Example {
 }
 ```
 
-5. Create a `tsconfig.json`
+4. Create a `tsconfig.json`
 
 ```json
 {
@@ -70,7 +70,7 @@ export class Example {
 }
 ```
 
-6. **Done**!
+5. **Done**!
 
 ### Application coupling
 
@@ -156,7 +156,7 @@ The `@App` options are:
 - `name` (string): Application name
 - `port` (string): Application port
 - `middleware` (Array<string>): Used middleware (**only works for http routes!**)
-- `publicDirectory` (string): Path to the public directory of this application
+- `publicDirectory` (string): Path to the public directory of this application (defaults to `public`)
 - `configure`: Callback (`(container) => void`) for configuring the application
 
 #### Implementing interfaces
