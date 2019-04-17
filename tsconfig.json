@@ -12,7 +12,8 @@
     "inlineSources": true,
     "types": [
       "node",
-      "ws"
+      "ws",
+      "jest"
     ],
     "baseUrl": "src",
     "experimentalDecorators": true
