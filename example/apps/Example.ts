@@ -162,5 +162,4 @@ export class Example {
       hello: () => 'Hello world!'
     }
   }
-
 }
