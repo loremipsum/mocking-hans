@@ -1,4 +1,4 @@
-import {Get, App, Socket, Middleware} from '../../src/Decorator';
+import {Get, App, Socket, Middleware, Graphql} from '../../src/Decorator';
 import {
   Response,
   XmlFromJsonResponse,
@@ -148,4 +148,19 @@ export class Example {
     console.log('Someone subscribed to /topic');
     socket.emit('news', {time: +(new Date())});
   }
+
+  /**
+   * GraphQL
+   */
+  @Graphql('/graphql', `
+  type Query {
+    hello: String
+  }
+`)
+  graphql() {
+    return {
+      hello: () => 'Hello world!'
+    }
+  }
+
 }
