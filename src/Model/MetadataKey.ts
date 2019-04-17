@@ -4,6 +4,7 @@ export enum MetadataKey {
   Name               = 'hans_app_name',
   SocketIORoutes     = 'hans_socket_io_routes',
   NativeSocketRoutes = 'hans_native_socket_routes',
+  GraphqlRoutes      = 'hans_graphql_routes',
   Middleware         = 'hans_middleware',
   AppMiddleware      = 'hans_app_middleware',
   Adapter            = 'hans_app_adapter',
