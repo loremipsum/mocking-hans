@@ -27,7 +27,7 @@ export const App = (options: {
     Metadata.set(target, MetadataKey.AppMiddleware, options.middleware);
 
     if (!options.publicDirectory) {
-      options.publicDirectory = path.join(__dirname, '../../public/');
+      options.publicDirectory = path.join(process.cwd(), '/public/');
     }
 
     Metadata.set(target, MetadataKey.PublicDirectory, options.publicDirectory);
