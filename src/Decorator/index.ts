@@ -3,3 +3,4 @@ export * from './Route';
 export * from './Socket';
 export * from './Websocket';
 export * from './Middleware';
+export * from './Graphql';

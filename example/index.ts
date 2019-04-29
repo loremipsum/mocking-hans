@@ -11,9 +11,9 @@ const apps = [
   Example,
   Twitter,
   WS,
-  Faker
+  Faker,
 ];
 
-(new Hans(apps)).bootstrap({ publicDirectory: 'public' }).then(() => {
+(new Hans(apps)).bootstrap().then(() => {
   console.log(chalk.blue(chalk.bold('\nAre you ready to ... MOCK?\n')));
 });

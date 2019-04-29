@@ -3,3 +3,4 @@ export * from './Decorator';
 export * from './Model';
 export * from './Response';
 export * from './Utility';
+export * from './Adapter';
