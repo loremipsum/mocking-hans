@@ -46,6 +46,8 @@ export class Hans {
       // tslint:disable-next-line
       console.info(`\t✔️  Started ${chalk.underline(name)} on localhost:${chalk.bold(port)}`);
     });
+
+    return this.appInstances;
   }
 
   private getAppInstance(app: { new(...args: any[]) }) {
