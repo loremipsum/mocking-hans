@@ -1,23 +1,15 @@
-export class State {
-  private state: Map<string, any> = new Map<string, any>();
+import {Container} from './Container';
 
+export class State extends Container {
   public get(key: string, fallback: any = null) {
     if (! this.has(key) && fallback) {
       return fallback;
     }
 
-    return this.state.get(key);
-  }
-
-  public has(key: string) {
-    return this.state.has(key);
+    return this.elements.get(key);
   }
 
   public set(key: string, value: any) {
-    this.state.set(key, value);
-  }
-
-  public delete(key: string) {
-    this.state.delete(key);
+    this.elements.set(key, value);
   }
 }
