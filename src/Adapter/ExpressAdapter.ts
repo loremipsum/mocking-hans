@@ -30,10 +30,13 @@ export class ExpressAdapter implements AdapterInterface {
     this.applyLogger(app);
     this.registerRoutes(app);
 
-    if (!this.container.has('http_server')) {
-      const server = this.express.listen(Metadata.get<string>(app, MetadataKey.Port));
+    let server = this.container.get('http_server');
+    if (!server) {
+      server = this.express.listen(Metadata.get<string>(app, MetadataKey.Port));
       this.container.set('http_server', server);
     }
+
+    return server;
   }
 
   public configure(cb: (container: Container) => void) {
@@ -42,20 +45,21 @@ export class ExpressAdapter implements AdapterInterface {
 
   private registerRoutes(app) {
     const appName    = Metadata.get<string>(app, MetadataKey.Name);
-    const routes     = Metadata.get<Array<RouteDefinition>>(app, MetadataKey.Routes);
+    const routes     = Metadata.get<Array<RouteDefinition>>(app, MetadataKey.Routes, []);
     const middleware = Metadata.get<Map<string, RequestHandler>>(app, MetadataKey.Middleware, new Map());
     const instance   = this.container.get(appName);
+    const expressApp = this.container.get('express_app');
 
     const appMiddleware = Metadata.get<Array<RequestHandler>>(app, MetadataKey.AppMiddleware, []);
-    appMiddleware.forEach(callback => this.express.use(callback));
+    appMiddleware.forEach(callback => expressApp.use(callback));
 
     routes.forEach(route => {
       const callbacks = middleware.get(route.methodName);
       if (Array.isArray(callbacks)) {
-        callbacks.forEach(callback => this.express.use(route.path, callback));
+        callbacks.forEach(callback => expressApp.use(route.path, callback));
       }
 
-      this.express[route.requestMethod]
+      expressApp[route.requestMethod]
       (route.path, (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const cb = instance[route.methodName](req, res, next);
         return this.handleResponse(res, cb, Metadata.get<string>(app, MetadataKey.PublicDirectory));
