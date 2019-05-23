@@ -35,7 +35,7 @@ export class Example {
   @Get('/json')
   json() {
     // Return 400 with "Bad request" message with a propability of 30%
-    if (Helper.hasPropability(0.3)) {
+    if (Helper.hasProbability(0.3)) {
       return new JsonResponse({
         message: 'Bad request'
       }, 400);
