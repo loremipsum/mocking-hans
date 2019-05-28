@@ -12,6 +12,6 @@
     "callable-types": false
   },
   "linterOptions": {
-    "exclude": ["example/**/*.ts"]
+    "exclude": ["example/**/*.ts", "test/**/*.ts"]
   }
 }

@@ -2,8 +2,8 @@ import {Response} from './Response';
 import * as jsonxml from 'jsontoxml';
 
 export class XmlFromJsonResponse extends Response {
-  constructor(protected content = {}) {
-    super(content);
+  constructor(protected content = {}, protected statusCode: number = 200, protected headers = []) {
+    super(content, statusCode, headers);
 
     this.headers.push('Content-Type: text/xml');
   }

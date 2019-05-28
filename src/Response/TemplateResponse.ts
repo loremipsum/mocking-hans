@@ -6,20 +6,19 @@ export class TemplateResponse extends Response {
   }
 
   public getContent() {
-    let result = this.content;
     for (const key in this.variables) {
       if (!this.variables.hasOwnProperty(key)) {
         continue;
       }
 
       if (typeof this.content === 'string') {
-        result = this.content.replace(`%${key}%`, this.variables[key]);
+        this.content = this.content.replace(`%${key}%`, this.variables[key]);
       }
 
       if (typeof this.content === 'object') {
-        result = JSON.parse(JSON.stringify(result).replace(`%${key}%`, this.variables[key]));
+        this.content = JSON.parse(JSON.stringify(this.content).replace(`%${key}%`, this.variables[key]));
       }
     }
-    return result;
+    return this.content;
   }
 }

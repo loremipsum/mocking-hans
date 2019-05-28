@@ -14,7 +14,7 @@ export class Helper {
     return elements[index];
   }
 
-  public static hasPropability(propability: number) {
-    return Math.random() <= propability;
+  public static hasProbability(probability: number) {
+    return Math.random() <= probability;
   }
 }
