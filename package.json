@@ -12,8 +12,9 @@
     "test": "jest",
     "test-coverage": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "build": "npm run test && tsc",
-    "lint": "tslint 'src/**/*.ts'"
+    "build": "tsc",
+    "lint": "tslint 'src/**/*.ts'",
+    "prepublishOnly": "npm run lint && npm run test && npm build"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
