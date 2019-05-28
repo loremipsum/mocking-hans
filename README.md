@@ -1,5 +1,8 @@
 # Mocking Hans
 
+[![Build Status](https://travis-ci.org/LoremIpsumGraz/mocking-hans.svg?branch=master)](https://travis-ci.org/LoremIpsumGraz/mocking-hans)
+[![Coverage Status](https://coveralls.io/repos/github/LoremIpsumGraz/mocking-hans/badge.svg?branch=master)](https://coveralls.io/github/LoremIpsumGraz/mocking-hans?branch=master)
+
 > You don't mock the Hans, he's mocking you.
 
 ## Features
