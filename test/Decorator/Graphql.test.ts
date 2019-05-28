@@ -6,23 +6,30 @@ import {ExpressAdapter, GraphqlAdapter} from '../../src/Adapter';
 describe("@Graphql class decorator", () => {
   test('set metadata', () => {
     class App {
-      @Graphql('graphql', `
+      @Graphql('graphqlfoo', `
         type Query {
           hello: String
         }
       `)
       foo() {}
+
+      @Graphql('graphqlbar', ``)
+      bar() {}
     }
 
     expect(Metadata.get(App, MetadataKey.Adapter)).toEqual([ExpressAdapter, GraphqlAdapter]);
     expect(Metadata.get(App, MetadataKey.GraphqlRoutes)).toEqual([{
-      path: '/graphql',
+      path: '/graphqlfoo',
       schema: `
         type Query {
           hello: String
         }
       `,
       methodName: 'foo'
+    }, {
+      path: '/graphqlbar',
+      schema: ``,
+      methodName: 'bar'
     }]);
   });
 });

@@ -1,3 +1,4 @@
+import {when} from 'jest-when';
 import {Container} from '../../src/Utility';
 import {SocketIOAdapter} from '../../src/Adapter';
 import {App, Socket} from '../../src/Decorator';
@@ -13,6 +14,10 @@ describe('SocketIOAdapter', () => {
     class TestApp {
       @Socket('/')
       foo() {
+      }
+
+      @Socket('/bar')
+      bar() {
       }
     }
 

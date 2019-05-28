@@ -16,6 +16,10 @@ describe('WebSocketAdapter', () => {
       @Websocket('/')
       foo() {
       }
+
+      @Websocket('/bar')
+      bar() {
+      }
     }
 
     const request = {url: '/'};

@@ -18,7 +18,7 @@ export class SocketIOAdapter implements AdapterInterface {
     this.container = container;
 
     if (!this.container.has('http_server')) {
-      this.container.set('http_server', this.io.listen(port));
+      this.container.set('http_server', require('http').createServer().listen(port));
     }
 
     this.io = require('socket.io')(this.container.get('http_server'));
