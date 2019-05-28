@@ -1,8 +1,8 @@
-# Aurora Client Changelog
+# Changelog
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## [0.4.0] - 2019-04-16
+## [0.4.0] - 2019-05-28
 ### Add
 - Add `Container`
 - Add application configuration to `@App` decorator
