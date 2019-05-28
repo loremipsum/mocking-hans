@@ -20,4 +20,12 @@ describe("Hans", () => {
       expect(instances.get('test')).toBeInstanceOf(TestApp);
     })
   });
+
+  test('bootstrap without apps', async () => {
+    const hans = new Hans([]);
+    hans.bootstrap().then((instances: Map<string, any>) => {
+      expect(instances).toBeInstanceOf(Map);
+      expect(instances.size).toBe(0);
+    })
+  });
 });
