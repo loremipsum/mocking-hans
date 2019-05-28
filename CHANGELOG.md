@@ -1,8 +1,11 @@
 # Changelog
 
-## [UNRELEASED]
+## [1.0.0] - 2019-05-28
 ### Add
 - travis + coveralls setup
+
+### Change
+- Update package.json
 
 ## [0.4.0] - 2019-05-28
 ### Add
