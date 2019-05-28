@@ -9,8 +9,9 @@
   "license": "MIT",
   "scripts": {
     "example": "ts-node -r tsconfig-paths/register example/index.ts",
-    "test": "npm run lint && jest",
+    "test": "jest",
     "test-coverage": "jest --coverage",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "build": "npm run test && tsc",
     "lint": "tslint 'src/**/*.ts'"
   },
@@ -46,11 +47,16 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "coveralls": "^3.0.3",
     "jest": "^24.8.0",
     "jest-when": "^2.5.0",
     "ts-jest": "^24.0.2",
     "tsconfig-paths": "^3.8.0",
     "tslint": "^5.16.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LoremIpsumGraz/mocking-hans.git"
   },
   "keywords": [
     "mocking",

@@ -1,6 +1,8 @@
 # Changelog
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/).
+## [UNRELEASED]
+### Add
+- travis + coveralls setup
 
 ## [0.4.0] - 2019-05-28
 ### Add
