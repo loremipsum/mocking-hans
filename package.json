@@ -57,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/LoremIpsumGraz/mocking-hans.git"
+    "url": "https://github.com/loremipsum/mocking-hans.git"
   },
   "keywords": [
     "mocking",
@@ -72,9 +72,9 @@
     "development"
   ],
   "bugs": {
-    "url": "https://github.com/LoremIpsumGraz/mocking-hans/issues"
+    "url": "https://github.com/loremipsum/mocking-hans/issues"
   },
-  "homepage": "https://github.com/LoremIpsumGraz/mocking-hans",
+  "homepage": "https://github.com/loremipsum/mocking-hans",
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node"
