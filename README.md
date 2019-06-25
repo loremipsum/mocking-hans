@@ -54,9 +54,11 @@ export class Example {
 
 ```json
 "scripts": {
-  "start": "ts-node-dev ./node_modules/.bin/hans apps"
+  "start": "ts-node-dev ./node_modules/.bin/hans apps --disable-compilation"
 }
 ```
+
+_Note:_ The `--disable-compilation` flag is required when using custom compilation like via `ts-node-dev`.
 
 4. Create a `tsconfig.json`
 
