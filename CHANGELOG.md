@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.0.1] - 2019-05-28
+## [1.0.2] - 2019-06-25
+### Fix
+- Fix prepublishOnly script
+
+## [1.0.1] - 2019-06-25
 ### Change
 - Rename repository namespace to @loremipsum
 - Ignore sub directories when using the cli utility

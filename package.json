@@ -1,6 +1,6 @@
 {
   "name": "@loremipsum/mocking-hans",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "You don't mock the Hans, he's mocking you.",
   "authors": [
     "Kevin Hirczy <kh@loremipsum.at>",
@@ -14,7 +14,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "build": "tsc",
     "lint": "tslint 'src/**/*.ts'",
-    "prepublishOnly": "npm run lint && npm run test && npm build"
+    "prepublishOnly": "npm run lint && npm run test && npm run build"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
