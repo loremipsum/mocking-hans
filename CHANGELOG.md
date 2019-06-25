@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1] - 2019-05-28
+### Change
+- Rename repository namespace to @loremipsum
+- Ignore sub directories when using the cli utility
+- Add flag to disable compilation
+
 ## [1.0.0] - 2019-05-28
 ### Add
 - travis + coveralls setup
