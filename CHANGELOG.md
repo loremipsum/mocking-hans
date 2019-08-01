@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.3] - 2019-08-01
+### Fix
+- Fix wrong package name in readme
+
 ## [1.0.2] - 2019-06-25
 ### Fix
 - Fix prepublishOnly script

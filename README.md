@@ -17,7 +17,7 @@
 
 ## Installation
 
-1. Install Hans via npm/yarn `npm i @loremipsum/hans` / `yarn add @loremipsum/hans`
+1. Install Hans via npm/yarn `npm i @loremipsum/mocking-hans` / `yarn add @loremipsum/mocking-hans`
 
 2. Create your APIs (recommended in an `apps/` directory):
 
