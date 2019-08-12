@@ -11,5 +11,8 @@ describe('Container', () => {
   test('get with fallback', () => {
     const state = new State();
     expect(state.get('foo', 'bar')).toEqual('bar');
+    expect(state.get('foo', 0)).toEqual(0);
+    state.set('foo', 42);
+    expect(state.get('foo')).toEqual(42);
   });
 });

@@ -4,6 +4,7 @@
 ### Fix
 - Fix types in response classes
 - Fix response headers
+- Support falsy fallback values in State getter (fixes state example)
 
 ## [1.0.3] - 2019-08-01
 ### Fix

@@ -39,7 +39,7 @@ export const App = (options: {
       MetadataKey.Routes,
       MetadataKey.GraphqlRoutes,
     ].forEach(metadata => {
-      if (! Metadata.has(target, metadata)) {
+      if (!Metadata.has(target, metadata)) {
         Metadata.set(target, metadata, []);
       }
     });
