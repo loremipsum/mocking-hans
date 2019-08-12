@@ -1,7 +1,12 @@
 import {Response} from './Response';
 
 export class TemplateResponse extends Response {
-  constructor(protected content: string | object, protected variables: object, statusCode: number = 200, headers = []) {
+  constructor(
+    content: string | object,
+    protected variables: Record<string, any> = {},
+    statusCode: number = 200,
+    headers: Record<string, string | string[]> = {},
+  ) {
     super(content, statusCode, headers);
   }
 

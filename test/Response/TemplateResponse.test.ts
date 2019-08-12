@@ -9,6 +9,7 @@ describe("TemplateResponse", () => {
 
     expect(response.getContent()).toEqual('Test Foo Bar.');
     expect(response.getStatusCode()).toEqual(400);
+    expect(response.getHeaders()).toEqual({});
   });
 
   test("getters with object input", () => {
@@ -17,6 +18,6 @@ describe("TemplateResponse", () => {
       var2: 'foo'
     });
 
-    expect(response.getContent()).toEqual({foo:'bar',bar:'foo'});
+    expect(response.getContent()).toEqual({foo: 'bar', bar: 'foo'});
   })
 });

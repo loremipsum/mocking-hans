@@ -20,7 +20,7 @@ describe('ExpressAdapter', () => {
     }
 
     const response = {status: jest.fn(), set: jest.fn(), send: jest.fn()};
-    const jsonResponse = new JsonResponse('content', 201, ['CustomHeader']);
+    const jsonResponse = new JsonResponse('content', 201, {'X-Test': 'CustomHeader'});
 
     const container: jest.Mocked<Container> = new Container() as any;
     container.has.mockReturnValue(false);
@@ -45,7 +45,7 @@ describe('ExpressAdapter', () => {
     expect(server).toBeInstanceOf(http.Server);
     expect(container.set).toBeCalled();
     expect(response.status).toBeCalledWith(201);
-    expect(response.set).toBeCalledWith(["CustomHeader", "Content-Type: application/json"]);
+    expect(response.set).toBeCalledWith({'X-Test': 'CustomHeader', 'Content-Type': 'application/json'});
     expect(response.send).toBeCalledWith('content');
 
     server.close();

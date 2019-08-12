@@ -1,9 +1,7 @@
 import {Response} from './Response';
 
 export class JsonResponse extends Response {
-  constructor(protected content = {}, statusCode: number = 200, headers = []) {
-    super(content, statusCode, headers);
-
-    this.headers.push('Content-Type: application/json');
+  constructor(content = {}, statusCode: number = 200, headers: Record<string, string | string[]> = {}) {
+    super(content, statusCode, {'Content-Type': 'application/json', ...headers});
   }
 }

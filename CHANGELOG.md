@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.4] - 2019-08-12
+### Fix
+- Fix types in response classes
+- Fix response headers
+
 ## [1.0.3] - 2019-08-01
 ### Fix
 - Fix wrong package name in readme

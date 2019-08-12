@@ -1,5 +1,9 @@
 export class Response {
-  constructor(protected content: any = '', protected statusCode: number = 200, protected headers = []) {
+  constructor(
+    protected content: any = '',
+    protected statusCode: number = 200,
+    protected headers: Record<string, string | string[]> = {},
+  ) {
   }
 
   public getContent() {

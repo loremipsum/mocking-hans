@@ -67,6 +67,8 @@ export class Example {
     return new JsonResponse({
       localState: this.localState.get('counter'),
       globalState: this.globalState.get('counter')
+    }, 200, {
+      'X-Header': 'custom'
     });
   }
 
