@@ -21,6 +21,9 @@ fs.readdirSync(appDirectory)
     }
     const className = file.replace('.ts', '');
     const obj       = require(process.cwd() + `/${appDirectory}/${file}`)[className];
+    if (!(obj instanceof Object)) {
+      return;
+    }
     apps.push(obj);
   });
 
