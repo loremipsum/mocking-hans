@@ -3,6 +3,7 @@
 ## [1.0.5] - 2019-08-23
 ### Fix
 - Register only Objects as apps to prevent unhandled promise rejection
+- Allow morgan typings with package @types/morgan
 
 ## [1.0.4] - 2019-08-12
 ### Fix
