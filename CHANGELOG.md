@@ -5,6 +5,9 @@
 - Register only Objects as apps to prevent unhandled promise rejection
 - Allow morgan typings with package @types/morgan
 
+### Change
+- Get rid of some any types
+
 ## [1.0.4] - 2019-08-12
 ### Fix
 - Fix types in response classes

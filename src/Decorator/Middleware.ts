@@ -5,7 +5,7 @@ import {Metadata} from '../Utility';
 type MiddlewareCallback = (req: Request, res: Response, next: NextFunction) => void;
 
 export const Middleware = (callback: Array<MiddlewareCallback>): MethodDecorator => {
-  return (target: any, propertyKey: string): void => {
+  return (target: object, propertyKey: string): void => {
     const middleware = Metadata.get<Map<string, Array<MiddlewareCallback>>>(
       target.constructor,
       MetadataKey.Middleware,

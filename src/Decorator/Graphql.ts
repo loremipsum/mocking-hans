@@ -8,7 +8,7 @@ export const Graphql = (path: string, schema: string): MethodDecorator => {
     path = `/${path}`;
   }
 
-  return (target: any, propertyKey: string): void => {
+  return (target: object, propertyKey: string): void => {
     const adapter = Metadata.get<Array<Type<AdapterInterface>>>(target.constructor, MetadataKey.Adapter, []);
     const routes = Metadata.get<Array<GraphqlRouteDefinition>>(target.constructor, MetadataKey.GraphqlRoutes, []);
 

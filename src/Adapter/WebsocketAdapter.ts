@@ -1,6 +1,5 @@
 import {AdapterInterface} from './AdapterInterface';
-import {Container} from '../Utility/Container';
-import {Metadata} from '../Utility';
+import {Container, Metadata} from '../Utility';
 import {MetadataKey, SocketDefinition} from '../Model';
 import WebSocket = require('ws');
 import chalk from 'chalk';

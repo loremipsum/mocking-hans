@@ -1,5 +1,5 @@
 export class Container {
-  protected elements: Map<string, any> = new Map<string, any>();
+  protected elements = new Map<string, any>();
 
   public set(id: string, obj: object) {
     this.elements.set(id, obj);

@@ -11,7 +11,7 @@ export const App = (options: {
   publicDirectory?: string,
   configure?: (container: Container) => void,
 }): ClassDecorator => {
-  return (target: any): void => {
+  return (target: object): void => {
     if (!options.configure) {
       options.configure = () => void 0;
     }
