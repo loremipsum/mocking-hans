@@ -89,6 +89,10 @@ export class ExpressAdapter implements AdapterInterface {
     this.express.use(morgan((tokens, req, res) => {
       const status = tokens.status(req, res);
 
+      if (!status) {
+        return;
+      }
+
       return `${chalk.underline(name)} (:${port}): ` + [
         tokens.method(req, res),
         tokens.url(req, res),
