@@ -1,5 +1,9 @@
 # Changelog
 
+## [UNRELEASED]
+### Fix
+- Fix error caused by undefined status in ExpressAdapter
+
 ## [1.0.5] - 2019-08-23
 ### Fix
 - Register only Objects as apps to prevent unhandled promise rejection
