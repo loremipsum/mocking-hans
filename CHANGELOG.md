@@ -1,6 +1,6 @@
 # Changelog
 
-## [UNRELEASED]
+## [1.0.6] - 2019-09-27
 ### Fix
 - Fix error caused by undefined status in ExpressAdapter
 
