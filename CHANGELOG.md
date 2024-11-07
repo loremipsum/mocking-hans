@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] - 2024-11-07
+### Change
+- Update typescript to ^4.6
+
 ## [1.0.6] - 2019-09-27
 ### Fix
 - Fix error caused by undefined status in ExpressAdapter
